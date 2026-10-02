@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Decision Engine — Mockup v0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#090b0f; --panel:#10141b; --panel2:#0d1117; --border:#1d2530; --border2:#232d3a;
+  --txt:#e6e9ef; --txt2:#8b94a3; --txt3:#5b6472;
+  --green:#34d399; --red:#f87171; --amber:#fbbf24; --blue:#60a5fa; --accent:#34d399;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;font-size:14px;-webkit-font-smoothing:antialiased}
+.mono{font-family:'JetBrains Mono',monospace}
+.wrap{max-width:1440px;margin:0 auto;padding:0 28px}
+
+/* ── topbar ── */
+.topbar{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(9,11,15,.85);backdrop-filter:blur(12px);z-index:50}
+.logo{font-weight:800;font-size:17px;letter-spacing:-.03em}
+.logo em{color:var(--green);font-style:normal}
+.search{flex:0 0 340px;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--txt3);font-size:13px;display:flex;gap:8px;align-items:center}
+.search kbd{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--panel2);border:1px solid var(--border2);border-radius:4px;padding:1px 6px}
+.market{margin-left:auto;font-size:12px;color:var(--txt2);display:flex;align-items:center;gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#34d399,#0ea5e9)}
+
+/* ── decision strip ── */
+.decision{display:grid;grid-template-columns:1.25fr .85fr 1.1fr;gap:16px;padding:20px 0 8px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 20px}
+.card h4{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--txt3);margin-bottom:12px}
+.tick{font-size:26px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:baseline;gap:10px}
+.tick small{font-size:13px;font-weight:500;color:var(--txt2)}
+.price{font-family:'JetBrains Mono',monospace;font-size:34px;font-weight:700;letter-spacing:-.02em;margin-top:6px}
+.chg{font-size:14px;font-weight:600;margin-left:10px}
+.up{color:var(--green)} .dn{color:var(--red)}
+.sub{color:var(--txt2);font-size:12.5px;margin-top:8px;display:flex;gap:16px}
+.sub b{color:var(--txt);font-weight:600}
+
+/* master dial */
+.master-wrap{display:flex;align-items:center;gap:20px}
+.score-num{font-size:52px;font-weight:800;font-family:'JetBrains Mono',monospace;letter-spacing:-.04em;line-height:1}
+.verdict{display:inline-block;margin-top:10px;font-size:12px;font-weight:700;letter-spacing:.12em;padding:6px 14px;border-radius:6px;background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.3)}
+.conf{margin-top:10px;font-size:12px;color:var(--txt2)}
+
+/* target range */
+.tg-val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700}
+.tg-val span{font-size:13px;color:var(--txt2);font-weight:500}
+.rangebar{position:relative;height:8px;border-radius:99px;background:linear-gradient(90deg,rgba(248,113,113,.5),rgba(251,191,36,.5),rgba(52,211,153,.5));margin:22px 0 8px}
+.rangebar .cur{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid var(--bg);transform:translate(-50%,-50%);box-shadow:0 0 0 2px #fff}
+.rangelabels{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt2)}
+.rangelabels b{color:var(--txt)}
+.upside{margin-top:12px;font-size:13px;color:var(--txt2)}
+.upside b{color:var(--green)}
+
+/* ── dials row ── */
+.dials{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;padding:8px 0 16px}
+.dial-card{text-align:center;padding:16px 10px 14px}
+.dial{position:relative;width:96px;height:96px;margin:0 auto}
+.dial svg{transform:rotate(0deg)}
+.dial .val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.dial .val b{font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:700}
+.dial .val small{font-size:9.5px;color:var(--txt3);margin-top:1px}
+.dial-name{font-size:12.5px;font-weight:600;margin-top:6px}
+.dial-sub{font-size:10.5px;color:var(--txt3);margin-top:2px}
+
+/* ── section titles ── */
+.sect{display:flex;align-items:baseline;gap:12px;padding:22px 0 12px}
+.sect h2{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.sect span{font-size:12px;color:var(--txt3)}
+.sect .line{flex:1;height:1px;background:var(--border)}
+
+/* ── finviz charts ── */
+.charts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.chart-card h4{display:flex;justify-content:space-between}
+.chart-card h4 em{font-style:normal;color:var(--txt3);font-weight:500;text-transform:none;letter-spacing:0}
+.bars{display:flex;align-items:flex-end;gap:10px;height:120px;padding-top:10px}
+.bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;height:100%}
+.bar i{display:block;width:70%;border-radius:4px 4px 0 0;background:var(--blue);opacity:.85;min-height:3px}
+.bar.neg i{background:var(--red)}
+.bar span{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3)}
+.bar em{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--txt2)}
+.legend{display:flex;gap:14px;margin-top:12px;font-size:11px;color:var(--txt2)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
+
+/* ── metric table ── */
+.tablecard{padding:8px 0}
+table{width:100%;border-collapse:collapse}
+th{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--txt3);text-align:left;padding:10px 14px;border-bottom:1px solid var(--border)}
+td{padding:9.5px 14px;border-bottom:1px solid rgba(29,37,48,.6);font-size:13px}
+td.m{color:var(--txt2);font-weight:500}
+td .mono{font-size:12.5px}
+.delta{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;padding:2px 7px;border-radius:4px}
+.delta.up{background:rgba(52,211,153,.1);color:var(--green)}
+.delta.dn{background:rgba(248,113,113,.1);color:var(--red)}
+.pct{position:relative;width:130px;height:5px;border-radius:99px;background:var(--panel2);border:1px solid var(--border)}
+.pct i{position:absolute;top:50%;width:9px;height:9px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);box-shadow:0 0 6px rgba(255,255,255,.6)}
+tr:hover td{background:rgba(255,255,255,.015)}
+
+/* ── peers + news ── */
+.bottom{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;padding-bottom:40px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:6px 0 0}
+.chip{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;background:var(--panel2);border:1px solid var(--border2);border-radius:7px;padding:6px 11px;color:var(--txt)}
+.chip b{color:var(--green);margin-left:7px;font-weight:700}
+.note{font-size:11.5px;color:var(--txt3);margin-top:12px}
+.news{display:flex;flex-direction:column;gap:10px}
+.newsi{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.newsi b{font-size:13px;font-weight:600;line-height:1.4;display:block}
+.newsi span{font-size:11px;color:var(--txt3);display:block;margin-top:5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="logo">DECIDE<em>.</em></div>
+    <div class="search">🔎&nbsp; Search a ticker… <kbd>⌘K</kbd></div>
+    <div class="market"><span class="dot"></span> Market Open · NYSE 9:42 AM CT</div>
+    <div class="avatar"></div>
+  </div>
+
+  <!-- SCROLL 1 · THE DECISION -->
+  <div class="decision">
+    <div class="card">
+      <h4>Apple Inc · NASDAQ:AAPL · Consumer Electronics</h4>
+      <div class="tick">AAPL <small>Apple Inc.</small></div>
+      <div class="price">$243.17 <span class="chg up">▲ +1.84%</span></div>
+      <div class="sub">
+        <span>Mkt Cap <b>$3.68T</b></span>
+        <span>Volume <b>48.2M</b></span>
+        <span>52W <b>$169–$258</b></span>
+      </div>
+      <svg width="100%" height="64" viewBox="0 0 400 60" preserveAspectRatio="none" style="margin-top:14px">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#34d399" stop-opacity=".35"/><stop offset="100%" stop-color="#34d399" stop-opacity="0"/>
+        </linearGradient></defs>
+        <path d="M0,48 L30,44 60,47 90,38 120,41 150,33 180,36 210,28 240,31 270,22 300,25 330,15 360,18 400,8 L400,60 0,60 Z" fill="url(#g)"/>
+        <path d="M0,48 L30,44 60,47 90,38 120,41 150,33 180,36 210,28 240,31 270,22 300,25 330,15 360,18 400,8" fill="none" stroke="#34d399" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <div class="card master-wrap">
+      <div class="dial" style="width:128px;height:128px">
+        <svg width="128" height="128" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#1d2530" stroke-width="10" stroke-linecap="round" stroke-dasharray="209.4 314.2" transform="rotate(135 60 60)"/>
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#34d399" stroke-width="10" stroke-linecap="round" stroke-dasharray="142.4 314.2" transform="rotate(135 60 60)"/>
+        </svg>
+        <div class="val"><b style="font-size:26px">68</b><small>/100</small></div>
+      </div>
+      <div>
+        <h4 style="margin-bottom:6px">Composite Score</h4>
+        <div class="verdict">ACCUMULATE</div>
+        <div class="conf">Model confidence: <b>72/100</b><br>6 sub-scores aggregated · formulas public</div>
+      </div>
+    </div>
+
+    <a href="/valuation/AAPL" style="text-decoration:none;color:inherit">
+    <div class="card" style="cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='#34d39955'" onmouseout="this.style.borderColor=''">
+      <h4>Price Target · 12M Model Range</h4>
+      <div class="tg-val">$262 <span>consensus mid</span></div>
+      <div class="rangebar"><div class="cur" style="left:41%"></div></div>
+      <div class="rangelabels"><span>Low <b>$205</b></span><span>Current <b>$243</b></span><span>High <b>$285</b></span></div>
+      <div class="upside">Implied upside to mid: <b>+7.8%</b> · range width ±15%</div>
+      <div style="margin-top:10px;font-size:11.5px;font-weight:600;letter-spacing:.06em;color:var(--green)">OPEN MODEL BREAKDOWN →</div>
+    </div>
+    </a>
+  </div>
+
+  <div class="dials">
+    <div class="card dial-card"><div class="dial"><svg width="96" height="96" viewBox="0 0 120 120"><circle cx="60" cy="60" r="46" fill="none" stroke="#1d2530" stroke-width="9" stroke-linecap="round" stroke-dasharray="192.7 289" transform="rotate(135 60 60)"/><circle cx="60" cy="60" r="46" fill="none" stroke="#fbbf24" stroke-width="9" stroke-linecap="round" stroke-dasharray="111.8 289" transform="rotate(135 60 60)"/></svg><div class="val"><b>58</b><small>/100</small></div></div><div class="dial-name">Valuation</div><div class="dial-sub">vs sector: rich</div></div>
+    <div class="card dial-card"><div class="dial"><svg width="96" height="96" viewBox="0 0 120 120"><circle cx="60" cy="60" r="46" fill="none" stroke="#1d2530" stroke-width="9" stroke-linecap="round" stroke-dasharray="192.7 289" transform="rotate(135 60 60)"/><circle cx="60" cy="60" r="46" fill="none" stroke="#34d399" stroke-width="9" stroke-linecap="round" stroke-dasharray="162 289" transform="rotate(135 60 60)"/></svg><div class="val"><b>84</b><small>/100</small></div></div><div class="dial-name">Growth</div><div class="dial-sub">vs sector: top 15%</div></div>
+    <div class="card dial-card"><div class="dial"><svg width="96" height="96" viewBox="0 0 120 120"><circle cx="60" cy="60" r="46" fill="none" stroke="#1d2530" stroke-width="9" stroke-linecap="round" stroke-dasharray="192.7 289" transform="rotate(135 60 60)"/><circle cx="60" cy="60" r="46" fill="none" stroke="#34d399" stroke-width="9" stroke-linecap="round" stroke-dasharray="146.4 289" transform="rotate(135 60 60)"/></svg><div class="val"><b>76</b><small>/100</small></div></div><div class="dial-name">Quality</div><div class="dial-sub">ROIC 42% · moat: wide</div></div>
+    <div class="card dial-card"><div class="dial"><svg width="96" height="96" viewBox="0 0 120 120"><circle cx="60" cy="60" r="46" fill="none" stroke="#1d2530" stroke-width="9" stroke-linecap="round" stroke-dasharray="192.7 289" transform="rotate(135 60 60)"/><circle cx="60" cy="60" r="46" fill="none" stroke="#34d399" stroke-width="9" stroke-linecap="round" stroke-dasharray="121.5 289" transform="rotate(135 60 60)"/></svg><div class="val"><b>63</b><small>/100</small></div></div><div class="dial-name">Momentum</div><div class="dial-sub">above 50d / 200d</div></div>
+    <div class="card dial-card"><div class="dial"><svg width="96" height="96" viewBox="0 0 120 120"><circle cx="60" cy="60" r="46" fill="none" stroke="#1d2530" stroke-width="9" stroke-linecap="round" stroke-dasharray="192.7 289" transform="rotate(135 60 60)"/><circle cx="60" cy="60" r="46" fill="none" stroke="#fbbf24" stroke-width="9" stroke-linecap="round" stroke-dasharray="105 289" transform="rotate(135 60 60)"/></svg><div class="val"><b>54</b><small>/100</small></div></div><div class="dial-name">Sentiment</div><div class="dial-sub">analyst drift: flat</div></div>
+    <div class="card dial-card"><div class="dial"><svg width="96" height="96" viewBox="0 0 120 120"><circle cx="60" cy="60" r="46" fill="none" stroke="#1d2530" stroke-width="9" stroke-linecap="round" stroke-dasharray="192.7 289" transform="rotate(135 60 60)"/><circle cx="60" cy="60" r="46" fill="none" stroke="#34d399" stroke-width="9" stroke-linecap="round" stroke-dasharray="136.8 289" transform="rotate(135 60 60)"/></svg><div class="val"><b>71</b><small>/100</small></div></div><div class="dial-name">Risk</div><div class="dial-sub">low vol · strong B/S</div></div>
+  </div>
+
+  <!-- SCROLL 2 · THE EVIDENCE -->
+  <div class="sect"><h2>Fundamentals</h2><span>quarterly · FY2025–Q2 FY2026</span><div class="line"></div></div>
+
+  <div class="charts">
+    <div class="card chart-card">
+      <h4>Revenue <em>$B · YoY +11%</em></h4>
+      <div class="bars">
+        <div class="bar"><em>89.8</em><i style="height:69%"></i><span>Q1'25</span></div>
+        <div class="bar"><em>94.0</em><i style="height:72%"></i><span>Q2'25</span></div>
+        <div class="bar"><em>94.9</em><i style="height:73%"></i><span>Q3'25</span></div>
+        <div class="bar"><em>119.6</em><i style="height:92%"></i><span>Q4'25</span></div>
+        <div class="bar"><em>95.4</em><i style="height:73%"></i><span>Q1'26</span></div>
+        <div class="bar"><em>123.9</em><i style="height:100%"></i><span>Q2'26</span></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--blue)"></i>reported</span><span><i style="background:var(--green)"></i>beat</span></div>
+    </div>
+    <div class="card chart-card">
+      <h4>GAAP EPS <em>$ · YoY +14%</em></h4>
+      <div class="bars">
+        <div class="bar"><em>1.40</em><i style="height:53%"></i><span>Q1'25</span></div>
+        <div class="bar"><em>1.57</em><i style="height:59%"></i><span>Q2'25</span></div>
+        <div class="bar"><em>1.57</em><i style="height:59%"></i><span>Q3'25</span></div>
+        <div class="bar"><em>2.40</em><i style="height:91%"></i><span>Q4'25</span></div>
+        <div class="bar"><em>1.65</em><i style="height:62%"></i><span>Q1'26</span></div>
+        <div class="bar"><em>2.67</em><i style="height:100%"></i><span>Q2'26</span></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--blue)"></i>GAAP diluted</span><span><i style="background:var(--red)"></i>miss (none)</span></div>
+    </div>
+    <div class="card chart-card">
+      <h4>Operating Margin <em>% · trend</em></h4>
+      <div class="bars">
+        <div class="bar"><em>32.8</em><i style="height:82%"></i><span>Q1'25</span></div>
+        <div class="bar"><em>30.2</em><i style="height:75%"></i><span>Q2'25</span></div>
+        <div class="bar"><em>29.3</em><i style="height:73%"></i><span>Q3'25</span></div>
+        <div class="bar"><em>33.6</em><i style="height:84%"></i><span>Q4'25</span></div>
+        <div class="bar"><em>33.9</em><i style="height:85%"></i><span>Q1'26</span></div>
+        <div class="bar"><em>35.1</em><i style="height:100%"></i><span>Q2'26</span></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--blue)"></i>Op margin</span><span>sector avg 18.2%</span></div>
+    </div>
+  </div>
+
+  <div class="sect"><h2>Key Metrics</h2><span>22 shown of 22 · vs sector & AI peer group</span><div class="line"></div></div>
+
+  <div class="card tablecard" style="padding:0">
+    <table>
+      <tr><th style="padding-left:20px">Metric</th><th>AAPL</th><th>vs Sector</th><th>vs AI Peers</th><th>Peer Range</th></tr>
+      <tr><td class="m" style="padding-left:20px">Market Cap</td><td class="mono">$3.68T</td><td><span class="delta up">+910%</span></td><td><span class="delta up">+64%</span></td><td><div class="pct"><i style="left:96%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">P/E (TTM)</td><td class="mono">35.2</td><td><span class="delta dn">+41%</span></td><td><span class="delta dn">+18%</span></td><td><div class="pct"><i style="left:78%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">Fwd P/E</td><td class="mono">31.8</td><td><span class="delta dn">+34%</span></td><td><span class="delta dn">+11%</span></td><td><div class="pct"><i style="left:71%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">PEG Ratio</td><td class="mono">2.31</td><td><span class="delta dn">+12%</span></td><td><span class="delta up">−4%</span></td><td><div class="pct"><i style="left:64%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">EV/EBITDA</td><td class="mono">24.6</td><td><span class="delta dn">+38%</span></td><td><span class="delta dn">+9%</span></td><td><div class="pct"><i style="left:74%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">P/Free Cash Flow</td><td class="mono">33.4</td><td><span class="delta dn">+44%</span></td><td><span class="delta dn">+15%</span></td><td><div class="pct"><i style="left:80%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">ROIC</td><td class="mono">42.1%</td><td><span class="delta up">+124%</span></td><td><span class="delta up">+48%</span></td><td><div class="pct"><i style="left:97%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">ROE</td><td class="mono">157%</td><td><span class="delta up">+520%</span></td><td><span class="delta up">+180%</span></td><td><div class="pct"><i style="left:99%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">Gross Margin</td><td class="mono">46.9%</td><td><span class="delta up">+38%</span></td><td><span class="delta up">+21%</span></td><td><div class="pct"><i style="left:88%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">Operating Margin</td><td class="mono">34.4%</td><td><span class="delta up">+89%</span></td><td><span class="delta up">+42%</span></td><td><div class="pct"><i style="left:94%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">Revenue CAGR 3Y</td><td class="mono">+8.4%</td><td><span class="delta up">+31%</span></td><td><span class="delta dn">−12%</span></td><td><div class="pct"><i style="left:58%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">EPS CAGR 3Y</td><td class="mono">+12.9%</td><td><span class="delta up">+54%</span></td><td><span class="delta dn">−6%</span></td><td><div class="pct"><i style="left:66%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">Debt / Equity</td><td class="mono">1.51</td><td><span class="delta dn">+22%</span></td><td><span class="delta up">−8%</span></td><td><div class="pct"><i style="left:62%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">FCF Yield</td><td class="mono">3.0%</td><td><span class="delta dn">−31%</span></td><td><span class="delta dn">−12%</span></td><td><div class="pct"><i style="left:40%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">Dividend Yield</td><td class="mono">0.42%</td><td><span class="delta dn">−58%</span></td><td><span class="delta dn">−61%</span></td><td><div class="pct"><i style="left:15%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">Buyback Yield</td><td class="mono">2.9%</td><td><span class="delta up">+210%</span></td><td><span class="delta up">+87%</span></td><td><div class="pct"><i style="left:92%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">Beta (1Y)</td><td class="mono">1.24</td><td><span class="delta up">+5%</span></td><td><span class="delta up">−3%</span></td><td><div class="pct"><i style="left:55%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">RSI (14)</td><td class="mono">61.3</td><td>—</td><td>—</td><td><div class="pct"><i style="left:61%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">52W Range Position</td><td class="mono">94%</td><td>—</td><td><span class="delta up">+22%</span></td><td><div class="pct"><i style="left:94%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">Short Interest</td><td class="mono">0.6%</td><td><span class="delta up">−71%</span></td><td><span class="delta up">−64%</span></td><td><div class="pct"><i style="left:8%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">Inst. Ownership</td><td class="mono">61.2%</td><td><span class="delta up">+4%</span></td><td><span class="delta up">+2%</span></td><td><div class="pct"><i style="left:63%"></i></div></td></tr>
+      <tr><td class="m" style="padding-left:20px">Insider Ownership</td><td class="mono">0.09%</td><td><span class="delta dn">−86%</span></td><td><span class="delta dn">−74%</span></td><td><div class="pct"><i style="left:6%"></i></div></td></tr>
+    </table>
+  </div>
+
+  <div class="bottom">
+    <div class="card">
+      <h4>AI Peer Group · similarity ≥80</h4>
+      <div class="chips">
+        <span class="chip">MSFT<b>94</b></span><span class="chip">AVGO<b>89</b></span><span class="chip">NVDA<b>87</b></span><span class="chip">QCOM<b>82</b></span><span class="chip">ORCL<b>80</b></span>
+      </div>
+      <div class="note">Clustered on fundamentals fingerprint (margins, growth, capital structure, factor loadings) — not GICS sector. BOOKMARKED: Phase 3 feature.</div>
+    </div>
+    <div class="card">
+      <h4>Signal, not noise</h4>
+      <div class="news">
+        <div class="newsi"><b>iPhone 18 cycle: supply-chain checks point to +9% unit guidance raise</b><span>2h ago · supply chain</span></div>
+        <div class="newsi"><b>Services margin hits all-time high; regulators open App Store fee probe</b><span>1d ago · regulatory</span></div>
+        <div class="newsi"><b>Insider selling: 3 execs sold 0.02% of shares — routine 10b5-1</b><span>3d ago · insider</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

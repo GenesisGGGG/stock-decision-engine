@@ -1,0 +1,93 @@
+{
+  "ticker": "SOFI",
+  "name": "SoFi Technologies, Inc.",
+  "price": 15.77,
+  "currency": "$",
+  "asof": "2026-10-03T05:10:14",
+  "archetype": "financial",
+  "g_base": 0.22,
+  "master": {
+    "fv": 16.76,
+    "upside": 0.0628
+  },
+  "models": [
+    {
+      "key": "dcf",
+      "name": "DCF",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.15,
+      "rating": 5,
+      "note": "FCF margin \u2264 0 \u2014 gate"
+    },
+    {
+      "key": "revdcf",
+      "name": "Reverse DCF",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.25,
+      "rating": 7,
+      "note": "DCF base invalid \u2014 gate"
+    },
+    {
+      "key": "pe",
+      "name": "Forward P/E",
+      "fv": 45.38,
+      "valid": true,
+      "weight": 0.16666666666666666,
+      "raw_weight": 0.1,
+      "rating": 4,
+      "note": "EPS fwd \u00d7 target 55.1x"
+    },
+    {
+      "key": "peg",
+      "name": "PEG",
+      "fv": 21.75,
+      "valid": true,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 4,
+      "note": "fair P/E = 1.2 \u00d7 22% = 26.4x"
+    },
+    {
+      "key": "evebitda",
+      "name": "EV/EBITDA",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 3,
+      "note": "EBITDA \u2264 0 or no history \u2014 gate"
+    },
+    {
+      "key": "ps",
+      "name": "P/S",
+      "fv": 22.65,
+      "valid": true,
+      "weight": 0.3333333333333333,
+      "raw_weight": 0.2,
+      "rating": 6.5,
+      "note": "target 6.9x P/S"
+    },
+    {
+      "key": "ri",
+      "name": "Residual Income",
+      "fv": 3.29,
+      "valid": true,
+      "weight": 0.4999999999999999,
+      "raw_weight": 0.3,
+      "rating": 7.5,
+      "note": "ROE 7.1% vs COE 14.5% \u2192 fair P/B 0.38x"
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "master_fv": 16.76
+    },
+    "bull": {
+      "master_fv": 16.76
+    }
+  }
+}

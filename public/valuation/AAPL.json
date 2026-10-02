@@ -1,0 +1,93 @@
+{
+  "ticker": "AAPL",
+  "name": "Apple Inc.",
+  "price": 333.69,
+  "currency": "$",
+  "asof": "2026-10-03T05:10:15",
+  "archetype": "compounder",
+  "g_base": 0.12,
+  "master": {
+    "fv": 223.84,
+    "upside": -0.3292
+  },
+  "models": [
+    {
+      "key": "dcf",
+      "name": "DCF",
+      "fv": 195.36,
+      "valid": true,
+      "weight": 0.37499999999999994,
+      "raw_weight": 0.3,
+      "rating": 8,
+      "note": "g=12.0% fade\u21922.5%, WACC=10.2%, FCFm=31.4%"
+    },
+    {
+      "key": "revdcf",
+      "name": "Reverse DCF",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.2,
+      "rating": 7,
+      "note": "price \u2265 zero-growth DCF \u2014 gate"
+    },
+    {
+      "key": "pe",
+      "name": "Forward P/E",
+      "fv": 280.16,
+      "valid": true,
+      "weight": 0.25,
+      "raw_weight": 0.2,
+      "rating": 8,
+      "note": "EPS fwd \u00d7 target 29.2x"
+    },
+    {
+      "key": "peg",
+      "name": "PEG",
+      "fv": 137.99,
+      "valid": true,
+      "weight": 0.125,
+      "raw_weight": 0.1,
+      "rating": 7,
+      "note": "fair P/E = 1.2 \u00d7 12% = 14.4x"
+    },
+    {
+      "key": "evebitda",
+      "name": "EV/EBITDA",
+      "fv": 257.29,
+      "valid": true,
+      "weight": 0.18749999999999997,
+      "raw_weight": 0.15,
+      "rating": 8,
+      "note": "target 22.5x EV/EBITDA"
+    },
+    {
+      "key": "ps",
+      "name": "P/S",
+      "fv": 240.8,
+      "valid": true,
+      "weight": 0.0625,
+      "raw_weight": 0.05,
+      "rating": 5,
+      "note": "target 7.5x P/S"
+    },
+    {
+      "key": "ri",
+      "name": "Residual Income",
+      "fv": 138.57,
+      "valid": true,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 2,
+      "note": "ROE 148.8% vs COE 10.3% \u2192 fair P/B 18.83x"
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "master_fv": 207.25
+    },
+    "bull": {
+      "master_fv": 242.09
+    }
+  }
+}

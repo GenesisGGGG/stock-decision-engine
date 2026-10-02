@@ -1,0 +1,93 @@
+{
+  "ticker": "ACHR",
+  "name": "Archer Aviation Inc.",
+  "price": 4.89,
+  "currency": "$",
+  "asof": "2026-10-03T05:10:14",
+  "archetype": "preprofit",
+  "g_base": 0.45,
+  "master": {
+    "fv": null,
+    "upside": null
+  },
+  "models": [
+    {
+      "key": "dcf",
+      "name": "DCF",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.05,
+      "rating": 2,
+      "note": "FCF margin \u2264 0 \u2014 gate"
+    },
+    {
+      "key": "revdcf",
+      "name": "Reverse DCF",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.55,
+      "rating": 8,
+      "note": "DCF base invalid \u2014 gate"
+    },
+    {
+      "key": "pe",
+      "name": "Forward P/E",
+      "fv": -14.53,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 0,
+      "note": "EPS fwd \u00d7 target 18.0x"
+    },
+    {
+      "key": "peg",
+      "name": "PEG",
+      "fv": -43.6,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 0,
+      "note": "fair P/E = 1.2 \u00d7 45% = 54.0x"
+    },
+    {
+      "key": "evebitda",
+      "name": "EV/EBITDA",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 1,
+      "note": "EBITDA \u2264 0 or no history \u2014 gate"
+    },
+    {
+      "key": "ps",
+      "name": "P/S",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.3,
+      "rating": 3,
+      "note": "pre-revenue (rev <$100M) or absurd target multiple \u2014 gate"
+    },
+    {
+      "key": "ri",
+      "name": "Residual Income",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.1,
+      "rating": 3,
+      "note": "book \u2264 0 or ROE \u2264 g \u2014 gate"
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "master_fv": null
+    },
+    "bull": {
+      "master_fv": null
+    }
+  }
+}

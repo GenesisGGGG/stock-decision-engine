@@ -1,0 +1,93 @@
+{
+  "ticker": "MSFT",
+  "name": "Microsoft Corporation",
+  "price": 517.53,
+  "currency": "$",
+  "asof": "2026-10-03T05:10:12",
+  "archetype": "compounder",
+  "g_base": 0.13,
+  "master": {
+    "fv": 588.7,
+    "upside": 0.1375
+  },
+  "models": [
+    {
+      "key": "dcf",
+      "name": "DCF",
+      "fv": 494.4,
+      "valid": true,
+      "weight": 0.37499999999999994,
+      "raw_weight": 0.3,
+      "rating": 8,
+      "note": "g=13.0% fade\u21922.5%, WACC=10.2%, FCFm=55.1%"
+    },
+    {
+      "key": "revdcf",
+      "name": "Reverse DCF",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.2,
+      "rating": 7.5,
+      "note": "price \u2265 zero-growth DCF \u2014 gate"
+    },
+    {
+      "key": "pe",
+      "name": "Forward P/E",
+      "fv": 827.53,
+      "valid": true,
+      "weight": 0.25,
+      "raw_weight": 0.2,
+      "rating": 8,
+      "note": "EPS fwd \u00d7 target 35.0x"
+    },
+    {
+      "key": "peg",
+      "name": "PEG",
+      "fv": 368.9,
+      "valid": true,
+      "weight": 0.125,
+      "raw_weight": 0.1,
+      "rating": 7.5,
+      "note": "fair P/E = 1.2 \u00d7 13% = 15.6x"
+    },
+    {
+      "key": "evebitda",
+      "name": "EV/EBITDA",
+      "fv": 618.28,
+      "valid": true,
+      "weight": 0.18749999999999997,
+      "raw_weight": 0.15,
+      "rating": 8,
+      "note": "target 23.9x EV/EBITDA"
+    },
+    {
+      "key": "ps",
+      "name": "P/S",
+      "fv": 550.05,
+      "valid": true,
+      "weight": 0.0625,
+      "raw_weight": 0.05,
+      "rating": 5.5,
+      "note": "target 12.3x P/S"
+    },
+    {
+      "key": "ri",
+      "name": "Residual Income",
+      "fv": 238.59,
+      "valid": true,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 1.5,
+      "note": "ROE 34.0% vs COE 10.4% \u2192 fair P/B 4.01x"
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "master_fv": 547.0
+    },
+    "bull": {
+      "master_fv": 634.61
+    }
+  }
+}

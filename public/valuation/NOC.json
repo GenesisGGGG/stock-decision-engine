@@ -1,0 +1,93 @@
+{
+  "ticker": "NOC",
+  "name": "Northrop Grumman Corporation",
+  "price": 478.0,
+  "currency": "$",
+  "asof": "2026-10-03T05:10:13",
+  "archetype": "defense",
+  "g_base": 0.05,
+  "master": {
+    "fv": 622.56,
+    "upside": 0.3024
+  },
+  "models": [
+    {
+      "key": "dcf",
+      "name": "DCF",
+      "fv": 979.48,
+      "valid": true,
+      "weight": 0.35,
+      "raw_weight": 0.35,
+      "rating": 8.5,
+      "note": "g=5.0% fade\u21922.5%, WACC=6.3%, FCFm=11.8%"
+    },
+    {
+      "key": "revdcf",
+      "name": "Reverse DCF",
+      "fv": 39.83,
+      "valid": true,
+      "weight": 0.15,
+      "raw_weight": 0.15,
+      "rating": 7,
+      "note": "implied g*=60.0%, your g=5.0%"
+    },
+    {
+      "key": "pe",
+      "name": "Forward P/E",
+      "fv": 527.56,
+      "valid": true,
+      "weight": 0.2,
+      "raw_weight": 0.2,
+      "rating": 8,
+      "note": "EPS fwd \u00d7 target 17.3x"
+    },
+    {
+      "key": "peg",
+      "name": "PEG",
+      "fv": 182.72,
+      "valid": true,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 5.5,
+      "note": "fair P/E = 1.2 \u00d7 5% = 6.0x"
+    },
+    {
+      "key": "evebitda",
+      "name": "EV/EBITDA",
+      "fv": 523.1,
+      "valid": true,
+      "weight": 0.2,
+      "raw_weight": 0.2,
+      "rating": 8.5,
+      "note": "target 12.3x EV/EBITDA"
+    },
+    {
+      "key": "ps",
+      "name": "P/S",
+      "fv": 532.0,
+      "valid": true,
+      "weight": 0.05,
+      "raw_weight": 0.05,
+      "rating": 3.5,
+      "note": "target 1.8x P/S"
+    },
+    {
+      "key": "ri",
+      "name": "Residual Income",
+      "fv": 740.67,
+      "valid": true,
+      "weight": 0.05,
+      "raw_weight": 0.05,
+      "rating": 3,
+      "note": "ROE 27.0% vs COE 6.7% \u2192 fair P/B 5.88x"
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "master_fv": 571.87
+    },
+    "bull": {
+      "master_fv": 679.1
+    }
+  }
+}
