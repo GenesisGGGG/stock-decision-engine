@@ -3,12 +3,22 @@
   "name": "UnitedHealth Group Incorporated",
   "price": 371.9,
   "currency": "$",
-  "asof": "2026-10-03T05:10:13",
+  "asof": "2026-10-03T05:25:17",
   "archetype": "compounder",
   "g_base": 0.1,
   "master": {
-    "fv": 478.2,
-    "upside": 0.2858
+    "fv": 479.51,
+    "upside": 0.2894,
+    "dispersion": {
+      "min": 393.4,
+      "max": 573.16,
+      "ratio": 1.46,
+      "level": "LOW"
+    },
+    "trimmed_models": [
+      "peg",
+      "dcf"
+    ]
   },
   "models": [
     {
@@ -16,60 +26,66 @@
       "name": "DCF",
       "fv": 822.88,
       "valid": true,
-      "weight": 0.3,
+      "weight": 0.0,
       "raw_weight": 0.3,
       "rating": 8.5,
-      "note": "g=10.0% fade\u21922.5%, WACC=7.4%, FCFm=6.0%"
+      "note": "g=10.0% fade\u21922.5%, WACC=7.4%, FCFm=6.0%",
+      "trimmed": true
     },
     {
       "key": "revdcf",
       "name": "Reverse DCF",
-      "fv": 61.98,
-      "valid": true,
-      "weight": 0.2,
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
       "raw_weight": 0.2,
       "rating": 6.5,
-      "note": "implied g*=60.0%, your g=10.0%"
+      "note": "price below zero-growth DCF ($520) \u2014 market prices ZERO/NEGATIVE growth. Signal of market pessimism, not a price target \u2014 excluded from blend",
+      "trimmed": false
     },
     {
       "key": "pe",
       "name": "Forward P/E",
       "fv": 520.69,
       "valid": true,
-      "weight": 0.2,
+      "weight": 0.5,
       "raw_weight": 0.2,
       "rating": 8.5,
-      "note": "EPS fwd \u00d7 target 23.0x"
+      "note": "EPS fwd \u00d7 target 23.0x",
+      "trimmed": false
     },
     {
       "key": "peg",
       "name": "PEG",
       "fv": 271.32,
       "valid": true,
-      "weight": 0.1,
+      "weight": 0.0,
       "raw_weight": 0.1,
       "rating": 8,
-      "note": "fair P/E = 1.2 \u00d7 10% = 12.0x"
+      "note": "fair P/E = 1.2 \u00d7 10% = 12.0x",
+      "trimmed": true
     },
     {
       "key": "evebitda",
       "name": "EV/EBITDA",
       "fv": 393.4,
       "valid": true,
-      "weight": 0.15,
+      "weight": 0.37499999999999994,
       "raw_weight": 0.15,
       "rating": 8,
-      "note": "target 14.8x EV/EBITDA"
+      "note": "target 14.8x EV/EBITDA",
+      "trimmed": false
     },
     {
       "key": "ps",
       "name": "P/S",
       "fv": 573.16,
       "valid": true,
-      "weight": 0.05,
+      "weight": 0.125,
       "raw_weight": 0.05,
       "rating": 4.5,
-      "note": "target 1.1x P/S"
+      "note": "target 1.1x P/S",
+      "trimmed": false
     },
     {
       "key": "ri",
@@ -79,15 +95,16 @@
       "weight": 0.0,
       "raw_weight": 0.0,
       "rating": 4,
-      "note": "ROE 14.2% vs COE 8.1% \u2192 fair P/B 2.07x"
+      "note": "ROE 14.2% vs COE 8.1% \u2192 fair P/B 2.07x",
+      "trimmed": false
     }
   ],
   "scenarios": {
     "bear": {
-      "master_fv": 421.81
+      "master_fv": 479.51
     },
     "bull": {
-      "master_fv": 541.15
+      "master_fv": 479.51
     }
   }
 }

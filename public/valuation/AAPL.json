@@ -3,12 +3,22 @@
   "name": "Apple Inc.",
   "price": 333.69,
   "currency": "$",
-  "asof": "2026-10-03T05:10:15",
+  "asof": "2026-10-03T05:25:19",
   "archetype": "compounder",
   "g_base": 0.12,
   "master": {
-    "fv": 223.84,
-    "upside": -0.3292
+    "fv": 200.31,
+    "upside": -0.3997,
+    "dispersion": {
+      "min": 154.88,
+      "max": 257.29,
+      "ratio": 1.66,
+      "level": "LOW"
+    },
+    "trimmed_models": [
+      "peg",
+      "pe"
+    ]
   },
   "models": [
     {
@@ -16,60 +26,66 @@
       "name": "DCF",
       "fv": 195.36,
       "valid": true,
-      "weight": 0.37499999999999994,
+      "weight": 0.4285714285714286,
       "raw_weight": 0.3,
       "rating": 8,
-      "note": "g=12.0% fade\u21922.5%, WACC=10.2%, FCFm=31.4%"
+      "note": "g=12.0% fade\u21922.5%, WACC=10.2%, FCFm=31.4%",
+      "trimmed": false
     },
     {
       "key": "revdcf",
       "name": "Reverse DCF",
-      "fv": null,
-      "valid": false,
-      "weight": 0.0,
+      "fv": 154.88,
+      "valid": true,
+      "weight": 0.28571428571428575,
       "raw_weight": 0.2,
       "rating": 7,
-      "note": "price \u2265 zero-growth DCF \u2014 gate"
+      "note": "implied g*=25.9%, your g=12.0%",
+      "trimmed": false
     },
     {
       "key": "pe",
       "name": "Forward P/E",
       "fv": 280.16,
       "valid": true,
-      "weight": 0.25,
+      "weight": 0.0,
       "raw_weight": 0.2,
       "rating": 8,
-      "note": "EPS fwd \u00d7 target 29.2x"
+      "note": "EPS fwd \u00d7 target 29.2x",
+      "trimmed": true
     },
     {
       "key": "peg",
       "name": "PEG",
       "fv": 137.99,
       "valid": true,
-      "weight": 0.125,
+      "weight": 0.0,
       "raw_weight": 0.1,
       "rating": 7,
-      "note": "fair P/E = 1.2 \u00d7 12% = 14.4x"
+      "note": "fair P/E = 1.2 \u00d7 12% = 14.4x",
+      "trimmed": true
     },
     {
       "key": "evebitda",
       "name": "EV/EBITDA",
       "fv": 257.29,
       "valid": true,
-      "weight": 0.18749999999999997,
+      "weight": 0.2142857142857143,
       "raw_weight": 0.15,
       "rating": 8,
-      "note": "target 22.5x EV/EBITDA"
+      "note": "target 22.5x EV/EBITDA",
+      "trimmed": false
     },
     {
       "key": "ps",
       "name": "P/S",
       "fv": 240.8,
       "valid": true,
-      "weight": 0.0625,
+      "weight": 0.07142857142857144,
       "raw_weight": 0.05,
       "rating": 5,
-      "note": "target 7.5x P/S"
+      "note": "target 7.5x P/S",
+      "trimmed": false
     },
     {
       "key": "ri",
@@ -79,15 +95,16 @@
       "weight": 0.0,
       "raw_weight": 0.0,
       "rating": 2,
-      "note": "ROE 148.8% vs COE 10.3% \u2192 fair P/B 18.83x"
+      "note": "ROE 148.8% vs COE 10.3% \u2192 fair P/B 18.83x",
+      "trimmed": false
     }
   ],
   "scenarios": {
     "bear": {
-      "master_fv": 207.25
+      "master_fv": 173.17
     },
     "bull": {
-      "master_fv": 242.09
+      "master_fv": 229.35
     }
   }
 }

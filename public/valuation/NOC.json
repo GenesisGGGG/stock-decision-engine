@@ -3,12 +3,22 @@
   "name": "Northrop Grumman Corporation",
   "price": 478.0,
   "currency": "$",
-  "asof": "2026-10-03T05:10:13",
+  "asof": "2026-10-03T05:25:18",
   "archetype": "defense",
   "g_base": 0.05,
   "master": {
-    "fv": 622.56,
-    "upside": 0.3024
+    "fv": 563.82,
+    "upside": 0.1795,
+    "dispersion": {
+      "min": 527.56,
+      "max": 740.67,
+      "ratio": 1.4,
+      "level": "LOW"
+    },
+    "trimmed_models": [
+      "evebitda",
+      "dcf"
+    ]
   },
   "models": [
     {
@@ -16,30 +26,33 @@
       "name": "DCF",
       "fv": 979.48,
       "valid": true,
-      "weight": 0.35,
+      "weight": 0.0,
       "raw_weight": 0.35,
       "rating": 8.5,
-      "note": "g=5.0% fade\u21922.5%, WACC=6.3%, FCFm=11.8%"
+      "note": "g=5.0% fade\u21922.5%, WACC=6.3%, FCFm=11.8%",
+      "trimmed": true
     },
     {
       "key": "revdcf",
       "name": "Reverse DCF",
-      "fv": 39.83,
-      "valid": true,
-      "weight": 0.15,
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
       "raw_weight": 0.15,
       "rating": 7,
-      "note": "implied g*=60.0%, your g=5.0%"
+      "note": "price below zero-growth DCF ($764) \u2014 market prices ZERO/NEGATIVE growth. Signal of market pessimism, not a price target \u2014 excluded from blend",
+      "trimmed": false
     },
     {
       "key": "pe",
       "name": "Forward P/E",
       "fv": 527.56,
       "valid": true,
-      "weight": 0.2,
+      "weight": 0.6666666666666666,
       "raw_weight": 0.2,
       "rating": 8,
-      "note": "EPS fwd \u00d7 target 17.3x"
+      "note": "EPS fwd \u00d7 target 17.3x",
+      "trimmed": false
     },
     {
       "key": "peg",
@@ -49,45 +62,49 @@
       "weight": 0.0,
       "raw_weight": 0.0,
       "rating": 5.5,
-      "note": "fair P/E = 1.2 \u00d7 5% = 6.0x"
+      "note": "fair P/E = 1.2 \u00d7 5% = 6.0x",
+      "trimmed": false
     },
     {
       "key": "evebitda",
       "name": "EV/EBITDA",
       "fv": 523.1,
       "valid": true,
-      "weight": 0.2,
+      "weight": 0.0,
       "raw_weight": 0.2,
       "rating": 8.5,
-      "note": "target 12.3x EV/EBITDA"
+      "note": "target 12.3x EV/EBITDA",
+      "trimmed": true
     },
     {
       "key": "ps",
       "name": "P/S",
       "fv": 532.0,
       "valid": true,
-      "weight": 0.05,
+      "weight": 0.16666666666666666,
       "raw_weight": 0.05,
       "rating": 3.5,
-      "note": "target 1.8x P/S"
+      "note": "target 1.8x P/S",
+      "trimmed": false
     },
     {
       "key": "ri",
       "name": "Residual Income",
       "fv": 740.67,
       "valid": true,
-      "weight": 0.05,
+      "weight": 0.16666666666666666,
       "raw_weight": 0.05,
       "rating": 3,
-      "note": "ROE 27.0% vs COE 6.7% \u2192 fair P/B 5.88x"
+      "note": "ROE 27.0% vs COE 6.7% \u2192 fair P/B 5.88x",
+      "trimmed": false
     }
   ],
   "scenarios": {
     "bear": {
-      "master_fv": 571.87
+      "master_fv": 563.82
     },
     "bull": {
-      "master_fv": 679.1
+      "master_fv": 563.82
     }
   }
 }

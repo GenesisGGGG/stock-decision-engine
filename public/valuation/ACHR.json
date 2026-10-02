@@ -3,12 +3,14 @@
   "name": "Archer Aviation Inc.",
   "price": 4.89,
   "currency": "$",
-  "asof": "2026-10-03T05:10:14",
+  "asof": "2026-10-03T05:25:20",
   "archetype": "preprofit",
   "g_base": 0.45,
   "master": {
     "fv": null,
-    "upside": null
+    "upside": null,
+    "dispersion": null,
+    "trimmed_models": []
   },
   "models": [
     {
@@ -19,7 +21,8 @@
       "weight": 0.0,
       "raw_weight": 0.05,
       "rating": 2,
-      "note": "FCF margin \u2264 0 \u2014 gate"
+      "note": "FCF margin \u2264 0 \u2014 gate",
+      "trimmed": false
     },
     {
       "key": "revdcf",
@@ -29,7 +32,8 @@
       "weight": 0.0,
       "raw_weight": 0.55,
       "rating": 8,
-      "note": "DCF base invalid \u2014 gate"
+      "note": "DCF base invalid \u2014 gate",
+      "trimmed": false
     },
     {
       "key": "pe",
@@ -39,7 +43,8 @@
       "weight": 0.0,
       "raw_weight": 0.0,
       "rating": 0,
-      "note": "EPS fwd \u00d7 target 18.0x"
+      "note": "EPS fwd \u00d7 target 18.0x",
+      "trimmed": false
     },
     {
       "key": "peg",
@@ -49,7 +54,8 @@
       "weight": 0.0,
       "raw_weight": 0.0,
       "rating": 0,
-      "note": "fair P/E = 1.2 \u00d7 45% = 54.0x"
+      "note": "fair P/E = 1.2 \u00d7 45% = 54.0x",
+      "trimmed": false
     },
     {
       "key": "evebitda",
@@ -59,7 +65,8 @@
       "weight": 0.0,
       "raw_weight": 0.0,
       "rating": 1,
-      "note": "EBITDA \u2264 0 or no history \u2014 gate"
+      "note": "EBITDA \u2264 0 or no history \u2014 gate",
+      "trimmed": false
     },
     {
       "key": "ps",
@@ -69,7 +76,8 @@
       "weight": 0.0,
       "raw_weight": 0.3,
       "rating": 3,
-      "note": "pre-revenue (rev <$100M) or absurd target multiple \u2014 gate"
+      "note": "pre-revenue (rev <$100M) or absurd target multiple \u2014 gate",
+      "trimmed": false
     },
     {
       "key": "ri",
@@ -79,7 +87,8 @@
       "weight": 0.0,
       "raw_weight": 0.1,
       "rating": 3,
-      "note": "book \u2264 0 or ROE \u2264 g \u2014 gate"
+      "note": "book \u2264 0 or ROE \u2264 g \u2014 gate",
+      "trimmed": false
     }
   ],
   "scenarios": {

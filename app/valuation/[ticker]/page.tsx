@@ -21,8 +21,13 @@ type Data = {
   asof: string
   archetype: string
   g_base: number
-  master: { fv: number | null; upside: number | null }
-  models: Model[]
+  master: {
+    fv: number | null
+    upside: number | null
+    dispersion: { min: number; max: number; ratio: number; level: string } | null
+    trimmed_models: string[]
+  }
+  models: (Model & { trimmed?: boolean })[]
   scenarios?: Record<string, { master_fv: number | null }>
 }
 
@@ -186,9 +191,26 @@ export default function ValuationPage() {
                   {(data.master.upside * 100).toFixed(1)}%
                 </div>
               )}
+              <div style={{ marginTop: 14, display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+                {data.master.dispersion && (
+                  <span style={{
+                    fontSize: 11.5, fontFamily: C.mono, fontWeight: 700, padding: "4px 10px", borderRadius: 6,
+                    border: `1px solid ${data.master.dispersion.level === "HIGH" ? C.red : data.master.dispersion.level === "MODERATE" ? C.amber : C.green}`,
+                    color: data.master.dispersion.level === "HIGH" ? C.red : data.master.dispersion.level === "MODERATE" ? C.amber : C.green,
+                    background: data.master.dispersion.level === "HIGH" ? "rgba(248,113,113,.08)" : data.master.dispersion.level === "MODERATE" ? "rgba(251,191,36,.08)" : "rgba(52,211,153,.08)",
+                  }}>
+                    {data.master.dispersion.level} DISAGREEMENT · models span {fmt(data.master.dispersion.min)}–{fmt(data.master.dispersion.max)} ({data.master.dispersion.ratio.toFixed(1)}x)
+                  </span>
+                )}
+                {data.master.trimmed_models?.length > 0 && (
+                  <span style={{ fontSize: 11.5, color: C.txt3 }}>
+                    fat-tail guard: min & max dropped ({data.master.trimmed_models.join(", ")})
+                  </span>
+                )}
+              </div>
             </div>
 
-            <div style={{ marginTop: 18 }}>
+            <div style={{ marginTop: 14 }}>
               <PriceBar lo={lo} hi={hi} current={data.price} fv={data.master.fv} height={26} />
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: C.txt2, marginTop: 8 }}>
                 <span>Low <b style={{ color: C.txt3 }}>—</b></span>
@@ -231,9 +253,20 @@ export default function ValuationPage() {
                     </span>
                   </div>
                   <div style={{ fontSize: 11, color: C.txt3, marginTop: 5, lineHeight: 1.45 }}>{m.note}</div>
+                  {m.trimmed && (
+                    <div style={{ marginTop: 5 }}>
+                      <span style={{
+                        fontSize: 10, fontFamily: C.mono, fontWeight: 700, letterSpacing: ".06em",
+                        padding: "2px 8px", borderRadius: 4,
+                        border: `1px solid ${C.amber}`, color: C.amber, background: "rgba(251,191,36,.08)",
+                      }}>
+                        TRIMMED — outlier, excluded from blend
+                      </span>
+                    </div>
+                  )}
                 </div>
                 {/* right: value + bar */}
-                <div style={{ opacity: m.valid ? 1 : 0.38 }}>
+                <div style={{ opacity: m.valid ? (m.trimmed ? 0.6 : 1) : 0.38 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
                     <span style={{ fontFamily: C.mono, fontSize: 17, fontWeight: 700, color: m.valid ? C.txt : C.txt3 }}>
                       {m.valid ? fmt(m.fv) : "invalid"}
@@ -254,8 +287,9 @@ export default function ValuationPage() {
           </div>
 
           <div style={{ marginTop: 26, fontSize: 12, color: C.txt3, lineHeight: 1.6 }}>
-            Draft 1 · data as of {new Date(data.asof).toLocaleString()} · targets = 5yr median own multiples ·
-            bear/bull scenarios computed, visualization pending · master blend gates invalid models and renormalizes weights.
+            Draft 1.1 · data as of {new Date(data.asof).toLocaleString()} · targets = 5yr median own multiples ·
+            invalid models are gated (weight 0) · when ≥5 models agree to run, the min & max outputs are trimmed as fat-tail guards ·
+            bear/bull scenarios computed, visualization pending.
           </div>
         </>
       )}
