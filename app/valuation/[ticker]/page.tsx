@@ -45,6 +45,10 @@ type Data = {
   }
   diagnostics?: Record<string, number | string | null>
   warnings?: string[]
+  dcf_curve?: {
+    points: { g: number; fv: number }[]
+    markers: Record<string, number | null>
+  }
 }
 
 const TICKERS = ["MSFT", "UNH", "NOC", "SOFI", "ACHR", "AAPL"]
@@ -133,10 +137,12 @@ export default function ValuationPage() {
   const router = useRouter()
   const [data, setData] = useState<Data | null>(null)
   const [err, setErr] = useState<string | null>(null)
+  const [gPos, setGPos] = useState<number | null>(null)
 
   useEffect(() => {
     setData(null)
     setErr(null)
+    setGPos(null)
     fetch(`/valuation/${ticker.toUpperCase()}.json`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`${r.status}`))))
       .then(setData)
@@ -279,6 +285,77 @@ export default function ValuationPage() {
               )}
             </div>
           )}
+
+          {/* ── GROWTH EXPLORER (slider over the precomputed DCF curve) ── */}
+          {data.dcf_curve && (() => {
+            const pts = data.dcf_curve!.points
+            const mk = data.dcf_curve!.markers
+            const lo = pts[0].g, hi = pts[pts.length - 1].g
+            const pos = gPos ?? mk.market ?? data.g_base ?? lo
+            const fvAt = (g: number): number => {
+              if (g <= pts[0].g) return pts[0].fv
+              for (let i = 0; i < pts.length - 1; i++) {
+                if (g >= pts[i].g && g <= pts[i + 1].g) {
+                  const t = (g - pts[i].g) / (pts[i + 1].g - pts[i].g || 1)
+                  return pts[i].fv + (pts[i + 1].fv - pts[i].fv) * t
+                }
+              }
+              return pts[pts.length - 1].fv
+            }
+            const fv = fvAt(pos), up = fv / data.price - 1
+            const chips: [string, string, string][] = [
+              ["assumed", "our g", C.txt],
+              ["market", "market g*", "#60a5fa"],
+              ["historical_5y", "5y hist", C.amber],
+              ["analyst_1y_fwd", "analyst 1y", "#c084fc"],
+            ]
+            return (
+              <div style={{ marginTop: 14, background: C.panel, border: `1px solid ${C.border}`, borderRadius: 16, padding: "18px 22px" }}>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 18, flexWrap: "wrap" }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".09em", textTransform: "uppercase", color: C.txt3 }}>
+                    Growth → DCF
+                  </div>
+                  <div style={{ fontFamily: C.mono, fontSize: 22, fontWeight: 700 }}>{fmt(fv)}</div>
+                  <div style={{ fontFamily: C.mono, fontSize: 13, fontWeight: 700, color: up >= 0 ? C.green : C.red }}>
+                    {up >= 0 ? "▲" : "▼"} {Math.abs(up * 100).toFixed(1)}% vs price
+                  </div>
+                  <div style={{ marginLeft: "auto", fontFamily: C.mono, fontSize: 13, color: C.txt2 }}>
+                    g = {(pos * 100).toFixed(1)}%
+                  </div>
+                </div>
+                <input
+                  type="range"
+                  min={lo}
+                  max={hi}
+                  step={(hi - lo) / 200}
+                  value={pos}
+                  onChange={(e) => setGPos(parseFloat(e.target.value))}
+                  style={{ width: "100%", marginTop: 12, accentColor: C.green }}
+                />
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 10 }}>
+                  {chips.map(([k, label, col]) => {
+                    const v = mk[k]
+                    if (v == null) return null
+                    const on = Math.abs(pos - v) < (hi - lo) / 200
+                    return (
+                      <button
+                        key={k}
+                        onClick={() => setGPos(v)}
+                        title={`jump to ${label}`}
+                        style={{
+                          fontSize: 11, fontFamily: C.mono, fontWeight: 700, padding: "4px 10px", borderRadius: 6,
+                          border: `1px solid ${on ? col : C.border}`, color: col, cursor: "pointer",
+                          background: on ? "rgba(255,255,255,.05)" : "transparent",
+                        }}
+                      >
+                        {label} {(v * 100).toFixed(1)}%
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })()}
 
           {/* ── SCENARIOS + DIAGNOSTICS ── */}
           {data.scenarios && (

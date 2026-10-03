@@ -3,7 +3,7 @@
   "name": "Archer Aviation Inc.",
   "price": 4.89,
   "currency": "$",
-  "asof": "2026-10-03T11:49:12",
+  "asof": "2026-10-03T12:15:57",
   "archetype": "preprofit",
   "g_base": 0.45,
   "master": {
@@ -133,7 +133,8 @@
     "implied_g_note": "not computable (FCFF margin <= 0 - gate)",
     "g_base": 0.45,
     "trailing_rev_cagr": null,
-    "cash_runway_years": 2.29
+    "cash_runway_years": 2.29,
+    "analyst_eps_growth_1y": null
   },
   "target_12m": {
     "eps_fwd": null,
@@ -146,6 +147,7 @@
     "upside_revert": null,
     "note": "forward EPS unavailable or non-positive - no 12M target"
   },
+  "dcf_curve": null,
   "inputs": {
     "rf": 0.05276999950408936,
     "erp": 0.046,

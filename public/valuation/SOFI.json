@@ -3,7 +3,7 @@
   "name": "SoFi Technologies, Inc.",
   "price": 15.77,
   "currency": "$",
-  "asof": "2026-10-03T11:49:11",
+  "asof": "2026-10-03T12:15:56",
   "archetype": "financial",
   "g_base": 0.22,
   "master": {
@@ -147,7 +147,8 @@
     "implied_g_note": "not computed for a bank",
     "g_base": 0.22,
     "trailing_rev_cagr": 0.3192,
-    "cash_runway_years": 0.36
+    "cash_runway_years": 0.36,
+    "analyst_eps_growth_1y": 0.7189
   },
   "target_12m": {
     "eps_fwd": 0.82,
@@ -160,6 +161,7 @@
     "upside_revert": 0.72,
     "note": "hold = forward EPS x today's trailing P/E (EPS-growth bet only); revert = forward EPS x target multiple (adds a re-rating bet)"
   },
+  "dcf_curve": null,
   "inputs": {
     "rf": 0.05276999950408936,
     "erp": 0.046,
