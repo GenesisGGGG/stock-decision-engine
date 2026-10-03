@@ -3,7 +3,7 @@
   "name": "Microsoft Corporation",
   "price": 517.53,
   "currency": "$",
-  "asof": "2026-10-03T10:25:58",
+  "asof": "2026-10-03T11:49:06",
   "archetype": "compounder",
   "g_base": 0.13,
   "master": {
@@ -164,6 +164,17 @@
     "implied_g_note": "market implies starting growth g*=37.3% vs assumed g=13.0%",
     "g_base": 0.13,
     "trailing_rev_cagr": 0.1612
+  },
+  "target_12m": {
+    "eps_fwd": 23.65,
+    "pe_current": 29.84,
+    "pe_target": 35.58,
+    "pe_source": "median trailing",
+    "fv_hold": 705.52,
+    "fv_revert": 841.31,
+    "upside_hold": 0.36,
+    "upside_revert": 0.63,
+    "note": "hold = forward EPS x today's trailing P/E (EPS-growth bet only); revert = forward EPS x target multiple (adds a re-rating bet)"
   },
   "inputs": {
     "rf": 0.05276999950408936,

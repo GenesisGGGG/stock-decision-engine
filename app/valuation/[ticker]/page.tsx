@@ -12,6 +12,7 @@ type Model = {
   weight: number
   rating: number
   note: string
+  role?: string
 }
 
 type Data = {
@@ -24,11 +25,26 @@ type Data = {
   master: {
     fv: number | null
     upside: number | null
+    status?: string
+    coverage?: number
     dispersion: { min: number; max: number; ratio: number; level: string } | null
     trimmed_models: string[]
   }
   models: (Model & { trimmed?: boolean })[]
-  scenarios?: Record<string, { master_fv: number | null }>
+  scenarios?: Record<string, { master_fv: number | null; g_used?: number; beta_used?: number; moved_by?: string[] }>
+  target_12m?: {
+    eps_fwd: number | null
+    pe_current: number | null
+    pe_target: number | null
+    pe_source: string | null
+    fv_hold: number | null
+    fv_revert: number | null
+    upside_hold: number | null
+    upside_revert: number | null
+    note: string | null
+  }
+  diagnostics?: Record<string, number | string | null>
+  warnings?: string[]
 }
 
 const TICKERS = ["MSFT", "UNH", "NOC", "SOFI", "ACHR", "AAPL"]
@@ -173,12 +189,17 @@ export default function ValuationPage() {
           {/* ── MASTER ── */}
           <div style={{ background: C.panel, border: `1px solid ${C.border}`, borderRadius: 16, padding: "24px 26px" }}>
             <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".09em", textTransform: "uppercase", color: C.txt3, marginBottom: 14 }}>
-              Master Blend · 7-Model Weighted Formula
+              Master Blend · 7 Models + 1 Diagnostic
             </div>
             <div style={{ display: "flex", alignItems: "baseline", gap: 14, flexWrap: "wrap" }}>
               <div style={{ fontFamily: C.mono, fontSize: 40, fontWeight: 700, letterSpacing: "-.03em" }}>
-                {fmt(data.master.fv)}
+                {data.master.fv != null ? fmt(data.master.fv) : "n/a"}
               </div>
+              {data.master.fv == null && (
+                <div style={{ fontSize: 12.5, color: C.amber, fontFamily: C.mono }}>
+                  master withheld · {data.master.status ?? "unknown"} (coverage {Math.round((data.master.coverage ?? 0) * 100)}% of model weight)
+                </div>
+              )}
               <div style={{ fontSize: 14, color: C.txt2 }}>
                 blended fair value · current <b style={{ color: C.txt, fontFamily: C.mono }}>{fmt(data.price)}</b>
               </div>
@@ -204,7 +225,7 @@ export default function ValuationPage() {
                 )}
                 {data.master.trimmed_models?.length > 0 && (
                   <span style={{ fontSize: 11.5, color: C.txt3 }}>
-                    fat-tail guard: min & max dropped ({data.master.trimmed_models.join(", ")})
+                    outlier guard: dropped outside 0.5–2.0× median band ({data.master.trimmed_models.join(", ")})
                   </span>
                 )}
               </div>
@@ -224,6 +245,75 @@ export default function ValuationPage() {
               </div>
             </div>
           </div>
+
+          {/* ── 12M PRICE TARGET ── */}
+          {data.target_12m && (
+            <div style={{ marginTop: 14, background: C.panel, border: `1px solid ${C.border}`, borderRadius: 16, padding: "18px 22px" }}>
+              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".09em", textTransform: "uppercase", color: C.txt3, marginBottom: 12 }}>
+                12-Month Price Target · forward EPS × multiple
+              </div>
+              {data.target_12m.fv_revert != null ? (
+                <div style={{ display: "flex", gap: 30, flexWrap: "wrap", alignItems: "baseline" }}>
+                  <div>
+                    <div style={{ fontSize: 11, color: C.txt3, fontFamily: C.mono }}>multiple holds ({data.target_12m.pe_current?.toFixed(1)}x)</div>
+                    <div style={{ fontFamily: C.mono, fontSize: 26, fontWeight: 700 }}>{fmt(data.target_12m.fv_hold)}</div>
+                    <div style={{ fontFamily: C.mono, fontSize: 12.5, fontWeight: 700, color: (data.target_12m.upside_hold ?? 0) >= 0 ? C.green : C.red }}>
+                      {(data.target_12m.upside_hold ?? 0) >= 0 ? "▲" : "▼"} {Math.abs((data.target_12m.upside_hold ?? 0) * 100).toFixed(1)}%
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 11, color: C.txt3, fontFamily: C.mono }}>reverts to {data.target_12m.pe_target?.toFixed(1)}x ({data.target_12m.pe_source})</div>
+                    <div style={{ fontFamily: C.mono, fontSize: 26, fontWeight: 700 }}>{fmt(data.target_12m.fv_revert)}</div>
+                    <div style={{ fontFamily: C.mono, fontSize: 12.5, fontWeight: 700, color: (data.target_12m.upside_revert ?? 0) >= 0 ? C.green : C.red }}>
+                      {(data.target_12m.upside_revert ?? 0) >= 0 ? "▲" : "▼"} {Math.abs((data.target_12m.upside_revert ?? 0) * 100).toFixed(1)}%
+                    </div>
+                  </div>
+                  <div style={{ marginLeft: "auto", fontSize: 12, color: C.txt3, maxWidth: 380, lineHeight: 1.55 }}>
+                    forward EPS <b style={{ color: C.txt, fontFamily: C.mono }}>${data.target_12m.eps_fwd?.toFixed(2)}</b> = analyst consensus (mechanical) ·
+                    the <b style={{ color: C.txt }}>multiple is the dial</b> — override with{" "}
+                    <code style={{ fontFamily: C.mono }}>target_pe</code> in CONFIG
+                  </div>
+                </div>
+              ) : (
+                <div style={{ fontSize: 12.5, color: C.amber, fontFamily: C.mono }}>unavailable · {data.target_12m.note}</div>
+              )}
+            </div>
+          )}
+
+          {/* ── SCENARIOS + DIAGNOSTICS ── */}
+          {data.scenarios && (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginTop: 14 }}>
+              {(["bear", "base", "bull"] as const).map((sc) => {
+                const v = sc === "base" ? { master_fv: data.master.fv, g_used: data.g_base }
+                                          : data.scenarios?.[sc]
+                const lab = sc === "base" ? "BASE" : sc.toUpperCase()
+                const col = sc === "bear" ? C.red : sc === "bull" ? C.green : C.txt
+                return (
+                  <div key={sc} style={{ background: C.panel, border: `1px solid ${C.border}`, borderRadius: 10, padding: "10px 14px" }}>
+                    <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: ".08em", color: C.txt3 }}>{lab}</div>
+                    <div style={{ fontFamily: C.mono, fontSize: 17, fontWeight: 700, color: col, marginTop: 2 }}>
+                      {v?.master_fv != null ? fmt(v.master_fv) : "n/a"}
+                    </div>
+                    <div style={{ fontSize: 11, color: C.txt3, marginTop: 2, fontFamily: C.mono }}>
+                      g {v?.g_used != null ? `${Math.round(v.g_used * 100)}%` : "—"}
+                      {v?.beta_used != null && ` · β ${v.beta_used}`}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+          {data.diagnostics?.cash_runway_years != null && (
+            <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 10, border: `1px solid ${C.amber}`,
+                          color: C.amber, fontSize: 12.5, fontFamily: C.mono, background: "rgba(251,191,36,.07)" }}>
+              cash runway ≈ {Number(data.diagnostics.cash_runway_years).toFixed(1)} years at current burn
+            </div>
+          )}
+          {data.warnings && data.warnings.length > 0 && (
+            <div style={{ marginTop: 10, fontSize: 11.5, color: C.txt3, lineHeight: 1.7 }}>
+              {data.warnings.map((w, i) => <div key={i}>⚠ {w}</div>)}
+            </div>
+          )}
 
           {/* ── 7 MODEL ROWS ── */}
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".09em", textTransform: "uppercase", color: C.txt3, margin: "26px 4px 12px" }}>
@@ -269,7 +359,7 @@ export default function ValuationPage() {
                 <div style={{ opacity: m.valid ? (m.trimmed ? 0.6 : 1) : 0.38 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
                     <span style={{ fontFamily: C.mono, fontSize: 17, fontWeight: 700, color: m.valid ? C.txt : C.txt3 }}>
-                      {m.valid ? fmt(m.fv) : "invalid"}
+                      {m.role === "diagnostic" ? "diagnostic" : m.valid ? fmt(m.fv) : "invalid"}
                     </span>
                     {m.valid && m.fv && (
                       <span style={{
@@ -287,9 +377,9 @@ export default function ValuationPage() {
           </div>
 
           <div style={{ marginTop: 26, fontSize: 12, color: C.txt3, lineHeight: 1.6 }}>
-            Draft 1.1 · data as of {new Date(data.asof).toLocaleString()} · targets = 5yr median own multiples ·
-            invalid models are gated (weight 0) · when ≥5 models agree to run, the min & max outputs are trimmed as fat-tail guards ·
-            bear/bull scenarios computed, visualization pending.
+            Draft 2 · data as of {new Date(data.asof).toLocaleString()} · targets = median of own historical multiples (3–5 FY, period share counts) ·
+            invalid models gated (weight 0) · outliers trimmed outside a 0.5–2.0× median band · dispersion spans ALL valid models (pre-trim) ·
+            reverse DCF is a diagnostic (market-implied growth, never blended) · every input, fallback and clamp logged in the JSON (inputs / warnings).
           </div>
         </>
       )}

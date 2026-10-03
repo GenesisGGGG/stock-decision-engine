@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stock Dashboard Preview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; color: #e5e7eb; font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; }
+  .topbar { display: flex; align-items: center; gap: 12px; padding: 16px 24px; border-bottom: 1px solid #1f2937; background: #0d1117; position: sticky; top: 0; z-index: 10; }
+  .logo { font-weight: 700; font-size: 18px; letter-spacing: -0.5px; color: #f9fafb; }
+  .logo span { color: #22c55e; }
+  input[type=text] { background: #111827; border: 1px solid #374151; color: #f9fafb; padding: 10px 14px; border-radius: 8px; font-size: 15px; width: 220px; outline: none; text-transform: uppercase; }
+  input[type=text]:focus { border-color: #22c55e; }
+  button { background: #22c55e; color: #04150a; border: none; padding: 10px 20px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
+  button:hover { background: #16a34a; }
+  .hint { color: #6b7280; font-size: 12px; }
+  .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; padding: 20px 24px; max-width: 1500px; margin: 0 auto; }
+  .card { background: #0d1117; border: 1px solid #1f2937; border-radius: 12px; overflow: hidden; }
+  .card h3 { padding: 12px 16px; font-size: 13px; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #1f2937; }
+  .card .body { height: 420px; }
+  #tape { padding: 0 24px 24px; max-width: 1500px; margin: 0 auto; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="logo">STOCK<span>IQ</span> <span class="hint">preview v0 — vision demo</span></div>
+    <input id="sym" type="text" placeholder="TICKER (e.g. AAPL)" value="AAPL" />
+    <button onclick="load()">Analyze</button>
+  </div>
+  <div id="tape"></div>
+  <div class="grid">
+    <div class="card">
+      <h3>Price chart</h3>
+      <div class="body" id="chart"></div>
+    </div>
+    <div class="card">
+      <h3>Overview</h3>
+      <div class="body" id="overview"></div>
+    </div>
+  </div>
+  <div class="grid" style="grid-template-columns: 1fr;">
+    <div class="card">
+      <h3>Technical analysis</h3>
+      <div class="body" id="ta"></div>
+    </div>
+  </div>
+
+<script>
+function tv(el, script, config) {
+  const host = document.getElementById(el);
+  host.innerHTML = '';
+  const s = document.createElement('script');
+  s.type = 'text/javascript';
+  s.async = true;
+  s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-' + script + '.js';
+  s.innerHTML = JSON.stringify(config);
+  host.appendChild(s);
+}
+function load() {
+  const sym = (document.getElementById('sym').value || 'AAPL').toUpperCase().trim();
+  tv('tape', 'ticker-tape', {
+    symbols: [{ proName: sym, title: sym }],
+    showSymbolLogo: true, colorTheme: 'dark', isTransparent: true, displayMode: 'adaptive', locale: 'en'
+  });
+  tv('chart', 'advanced-chart', {
+    symbol: sym, interval: 'D', timezone: 'America/Chicago',
+    theme: 'dark', style: '1', locale: 'en',
+    hide_side_toolbar: false, allow_symbol_change: true,
+    support_host: 'https://www.tradingview.com'
+  });
+  tv('overview', 'symbol-overview', {
+    symbols: [[sym + '|1D']],
+    chartOnly: false, width: '100%', height: '100%', locale: 'en',
+    colorTheme: 'dark', isTransparent: true, autosize: true,
+    largeChartUrl: ''
+  });
+  tv('ta', 'technical-analysis', {
+    symbol: sym, width: '100%', height: '100%', locale: 'en',
+    colorTheme: 'dark', isTransparent: true
+  });
+}
+load();
+</script>
+</body>
+</html>

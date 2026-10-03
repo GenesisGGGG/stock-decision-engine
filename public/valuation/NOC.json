@@ -3,7 +3,7 @@
   "name": "Northrop Grumman Corporation",
   "price": 478.0,
   "currency": "$",
-  "asof": "2026-10-03T10:26:01",
+  "asof": "2026-10-03T11:49:09",
   "archetype": "defense",
   "g_base": 0.05,
   "master": {
@@ -162,6 +162,17 @@
     "implied_g_note": "market implies starting growth g*=2.1% vs assumed g=5.0%",
     "g_base": 0.05,
     "trailing_rev_cagr": 0.0465
+  },
+  "target_12m": {
+    "eps_fwd": 30.45,
+    "pe_current": 15.14,
+    "pe_target": 18.68,
+    "pe_source": "median trailing",
+    "fv_hold": 461.05,
+    "fv_revert": 568.77,
+    "upside_hold": -0.04,
+    "upside_revert": 0.19,
+    "note": "hold = forward EPS x today's trailing P/E (EPS-growth bet only); revert = forward EPS x target multiple (adds a re-rating bet)"
   },
   "inputs": {
     "rf": 0.05276999950408936,

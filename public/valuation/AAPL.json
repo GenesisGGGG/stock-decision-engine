@@ -3,7 +3,7 @@
   "name": "Apple Inc.",
   "price": 333.69,
   "currency": "$",
-  "asof": "2026-10-03T10:26:06",
+  "asof": "2026-10-03T11:49:14",
   "archetype": "compounder",
   "g_base": 0.12,
   "master": {
@@ -163,6 +163,17 @@
     "implied_g_note": "market implies starting growth g*=32.2% vs assumed g=12.0%",
     "g_base": 0.12,
     "trailing_rev_cagr": 0.0181
+  },
+  "target_12m": {
+    "eps_fwd": 9.58,
+    "pe_current": 38.08,
+    "pe_target": 30.52,
+    "pe_source": "median trailing",
+    "fv_hold": 364.95,
+    "fv_revert": 292.43,
+    "upside_hold": 0.09,
+    "upside_revert": -0.12,
+    "note": "hold = forward EPS x today's trailing P/E (EPS-growth bet only); revert = forward EPS x target multiple (adds a re-rating bet)"
   },
   "inputs": {
     "rf": 0.05276999950408936,

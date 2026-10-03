@@ -3,7 +3,7 @@
   "name": "UnitedHealth Group Incorporated",
   "price": 371.9,
   "currency": "$",
-  "asof": "2026-10-03T10:26:00",
+  "asof": "2026-10-03T11:49:08",
   "archetype": "compounder",
   "g_base": 0.1,
   "master": {
@@ -162,6 +162,17 @@
     "implied_g_note": "market implies starting growth g*=-3.9% vs assumed g=10.0%",
     "g_base": 0.1,
     "trailing_rev_cagr": 0.1135
+  },
+  "target_12m": {
+    "eps_fwd": 22.61,
+    "pe_current": 23.42,
+    "pe_target": 23.34,
+    "pe_source": "median trailing",
+    "fv_hold": 529.44,
+    "fv_revert": 527.77,
+    "upside_hold": 0.42,
+    "upside_revert": 0.42,
+    "note": "hold = forward EPS x today's trailing P/E (EPS-growth bet only); revert = forward EPS x target multiple (adds a re-rating bet)"
   },
   "inputs": {
     "rf": 0.05276999950408936,
