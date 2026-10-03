@@ -3,16 +3,24 @@
   "name": "SoFi Technologies, Inc.",
   "price": 15.77,
   "currency": "$",
-  "asof": "2026-10-03T05:25:19",
+  "asof": "2026-10-03T10:26:03",
   "archetype": "financial",
   "g_base": 0.22,
   "master": {
-    "fv": 16.76,
-    "upside": 0.0628,
+    "fv": 11.69,
+    "upside": -0.2589,
+    "status": "ok",
+    "coverage": 0.65,
     "dispersion": {
-      "min": 3.29,
-      "max": 45.38,
-      "ratio": 13.78,
+      "min": 6.12,
+      "max": 18.19,
+      "ratio": 2.97,
+      "level": "HIGH"
+    },
+    "dispersion_blend": {
+      "min": 6.12,
+      "max": 18.19,
+      "ratio": 2.97,
       "level": "HIGH"
     },
     "trimmed_models": []
@@ -20,88 +28,174 @@
   "models": [
     {
       "key": "dcf",
-      "name": "DCF",
+      "name": "DCF (FCFF)",
+      "role": "blend",
       "fv": null,
       "valid": false,
       "weight": 0.0,
-      "raw_weight": 0.15,
+      "raw_weight": 0.0,
       "rating": 5,
-      "note": "FCF margin \u2264 0 \u2014 gate",
+      "note": "FCFF undefined for a bank (debt and cash are operating items) - gate",
       "trimmed": false
     },
     {
       "key": "revdcf",
-      "name": "Reverse DCF",
+      "name": "Reverse DCF (diagnostic)",
+      "role": "diagnostic",
       "fv": null,
       "valid": false,
       "weight": 0.0,
-      "raw_weight": 0.25,
+      "raw_weight": 0.0,
       "rating": 7,
-      "note": "DCF base invalid \u2014 gate",
-      "trimmed": false
+      "note": "not computed for a bank",
+      "trimmed": false,
+      "implied_g": null
     },
     {
       "key": "pe",
-      "name": "Forward P/E",
-      "fv": 45.38,
-      "valid": true,
-      "weight": 0.16666666666666669,
-      "raw_weight": 0.1,
+      "name": "P/E (trailing)",
+      "role": "blend",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.35,
       "rating": 4,
-      "note": "EPS fwd \u00d7 target 55.1x",
+      "note": "fewer than 3 FY of positive earnings history - gate",
       "trimmed": false
     },
     {
       "key": "peg",
       "name": "PEG",
-      "fv": 21.75,
+      "role": "blend",
+      "fv": 12.66,
       "valid": true,
       "weight": 0.0,
       "raw_weight": 0.0,
       "rating": 4,
-      "note": "fair P/E = 1.2 \u00d7 22% = 26.4x",
+      "note": "fair P/E = 1.2 x 22 = 26.4x on normalized EPS",
       "trimmed": false
     },
     {
       "key": "evebitda",
       "name": "EV/EBITDA",
+      "role": "blend",
       "fv": null,
       "valid": false,
       "weight": 0.0,
       "raw_weight": 0.0,
       "rating": 3,
-      "note": "EBITDA \u2264 0 or no history \u2014 gate",
+      "note": "EV/EBITDA not meaningful for a bank - gate",
       "trimmed": false
     },
     {
       "key": "ps",
       "name": "P/S",
-      "fv": 22.65,
+      "role": "blend",
+      "fv": 17.62,
       "valid": true,
-      "weight": 0.33333333333333337,
-      "raw_weight": 0.2,
+      "weight": 0.0,
+      "raw_weight": 0.0,
       "rating": 6.5,
-      "note": "target 6.9x P/S",
+      "note": "5.53x LTM revenue (median, 4 FY)",
+      "trimmed": false
+    },
+    {
+      "key": "pb",
+      "name": "P/B",
+      "role": "blend",
+      "fv": 18.19,
+      "valid": true,
+      "weight": 0.4615,
+      "raw_weight": 0.3,
+      "rating": null,
+      "note": "2.22x BVPS 8.19 (median, 4 FY)",
       "trimmed": false
     },
     {
       "key": "ri",
       "name": "Residual Income",
-      "fv": 3.29,
+      "role": "blend",
+      "fv": 6.12,
       "valid": true,
-      "weight": 0.5,
-      "raw_weight": 0.3,
+      "weight": 0.5385,
+      "raw_weight": 0.35,
       "rating": 7.5,
-      "note": "ROE 7.1% vs COE 14.5% \u2192 fair P/B 0.38x",
+      "note": "ROE 7.1% fades to COE 13.6% over 10y; BVPS 8.19, payout 0%",
       "trimmed": false
     }
   ],
   "scenarios": {
     "bear": {
-      "master_fv": 16.76
+      "master_fv": 11.59,
+      "g_used": 0.14,
+      "beta_used": 1.959,
+      "moved_by": [
+        "ri"
+      ]
     },
     "bull": {
-      "master_fv": 16.76
+      "master_fv": 11.79,
+      "g_used": 0.3,
+      "beta_used": 1.659,
+      "moved_by": [
+        "ri"
+      ]
     }
-  }
+  },
+  "diagnostics": {
+    "implied_g": null,
+    "implied_g_note": "not computed for a bank",
+    "g_base": 0.22,
+    "trailing_rev_cagr": 0.3192,
+    "cash_runway_years": 0.36
+  },
+  "inputs": {
+    "rf": 0.05276999950408936,
+    "erp": 0.046,
+    "beta_raw": 2.208,
+    "beta_adj": 1.8093600000000003,
+    "cost_of_equity": 0.13600055950408937,
+    "wacc": 0.12742002788468088,
+    "tax": 0.1,
+    "cost_of_debt": 0.08,
+    "shares_diluted": 1351990000.0,
+    "debt_gross": 3405137000.0,
+    "leases_excluded": 104083000.0,
+    "debt_used": 3301054000.0,
+    "cash": 3126237000.0,
+    "cash_excess": 3126237000.0,
+    "rev_ltm": 4305695000.0,
+    "ebitda_ltm": null,
+    "ebitda_basis": "info",
+    "earnings_ltm": 648089119.346514,
+    "earnings_basis": "normalized",
+    "eps_ltm": 0.479359403062533,
+    "ocf_ltm": -8502490000.0,
+    "capex_ltm": 297294000.0,
+    "sbc_ltm": 283923000.0,
+    "interest_ltm": 1276930000.0,
+    "fcff_ltm": -7934470000.0,
+    "fcff_margin_start": -1.842784962706369,
+    "fcff_margin_norm": null,
+    "roe": 0.07094506842828827,
+    "bvps": 8.192536187397836,
+    "payout": 0.0,
+    "hist_years": 4,
+    "hist_multiples": {
+      "pe": null,
+      "ps": {
+        "median": 5.531472580942991,
+        "n": 4
+      },
+      "evebitda": null,
+      "pb": {
+        "median": 2.2200431853677793,
+        "n": 4
+      }
+    }
+  },
+  "warnings": [
+    "effective tax clamped 0.08469 -> 0.1",
+    "cost of debt clamped 0.3868 -> 0.08"
+  ]
 }

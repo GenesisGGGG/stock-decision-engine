@@ -3,108 +3,216 @@
   "name": "UnitedHealth Group Incorporated",
   "price": 371.9,
   "currency": "$",
-  "asof": "2026-10-03T05:25:17",
+  "asof": "2026-10-03T10:26:00",
   "archetype": "compounder",
   "g_base": 0.1,
   "master": {
-    "fv": 479.51,
-    "upside": 0.2894,
+    "fv": 359.74,
+    "upside": -0.0327,
+    "status": "ok",
+    "coverage": 1.0,
     "dispersion": {
-      "min": 393.4,
-      "max": 573.16,
-      "ratio": 1.46,
-      "level": "LOW"
+      "min": 190.59,
+      "max": 745.75,
+      "ratio": 3.91,
+      "level": "HIGH"
+    },
+    "dispersion_blend": {
+      "min": 190.59,
+      "max": 612.43,
+      "ratio": 3.21,
+      "level": "HIGH"
     },
     "trimmed_models": [
-      "peg",
       "dcf"
     ]
   },
   "models": [
     {
       "key": "dcf",
-      "name": "DCF",
-      "fv": 822.88,
+      "name": "DCF (FCFF)",
+      "role": "blend",
+      "fv": 745.75,
       "valid": true,
       "weight": 0.0,
-      "raw_weight": 0.3,
+      "raw_weight": 0.4,
       "rating": 8.5,
-      "note": "g=10.0% fade\u21922.5%, WACC=7.4%, FCFm=6.0%",
+      "note": "g=10.0% fading to 2.5%, WACC=7.9%, FCFF margin 5.2% -> 6.5% (historical median) by y5",
       "trimmed": true
     },
     {
-      "key": "revdcf",
-      "name": "Reverse DCF",
-      "fv": null,
-      "valid": false,
+      "key": "dcf_mkt",
+      "name": "DCF @ market g",
+      "role": "diagnostic",
+      "fv": 371.9,
+      "valid": true,
       "weight": 0.0,
-      "raw_weight": 0.2,
-      "rating": 6.5,
-      "note": "price below zero-growth DCF ($520) \u2014 market prices ZERO/NEGATIVE growth. Signal of market pessimism, not a price target \u2014 excluded from blend",
+      "raw_weight": 0.0,
+      "rating": null,
+      "note": "same DCF run at the market-implied growth g*=-3.9% - lands on the price by construction; this row shows the market's assumption, not ours",
       "trimmed": false
     },
     {
+      "key": "revdcf",
+      "name": "Reverse DCF (diagnostic)",
+      "role": "diagnostic",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 6.5,
+      "note": "market implies starting growth g*=-3.9% vs assumed g=10.0%",
+      "trimmed": false,
+      "implied_g": -0.0393
+    },
+    {
       "key": "pe",
-      "name": "Forward P/E",
-      "fv": 520.69,
+      "name": "P/E (trailing)",
+      "role": "blend",
+      "fv": 370.73,
       "valid": true,
-      "weight": 0.5,
-      "raw_weight": 0.2,
+      "weight": 0.4167,
+      "raw_weight": 0.25,
       "rating": 8.5,
-      "note": "EPS fwd \u00d7 target 23.0x",
+      "note": "normalized LTM EPS 15.88 x 23.3x (median trailing P/E, 4 FY)",
       "trimmed": false
     },
     {
       "key": "peg",
       "name": "PEG",
-      "fv": 271.32,
+      "role": "blend",
+      "fv": 190.59,
       "valid": true,
-      "weight": 0.0,
+      "weight": 0.1667,
       "raw_weight": 0.1,
       "rating": 8,
-      "note": "fair P/E = 1.2 \u00d7 10% = 12.0x",
-      "trimmed": true
+      "note": "fair P/E = 1.2 x 10 = 12.0x on normalized EPS",
+      "trimmed": false
     },
     {
       "key": "evebitda",
       "name": "EV/EBITDA",
-      "fv": 393.4,
+      "role": "blend",
+      "fv": 367.39,
       "valid": true,
-      "weight": 0.37499999999999994,
-      "raw_weight": 0.15,
+      "weight": 0.3333,
+      "raw_weight": 0.2,
       "rating": 8,
-      "note": "target 14.8x EV/EBITDA",
+      "note": "15.6x LTM EBITDA (median, 4 FY, period net debt)",
       "trimmed": false
     },
     {
       "key": "ps",
       "name": "P/S",
-      "fv": 573.16,
+      "role": "blend",
+      "fv": 612.43,
       "valid": true,
-      "weight": 0.125,
+      "weight": 0.0833,
       "raw_weight": 0.05,
       "rating": 4.5,
-      "note": "target 1.1x P/S",
+      "note": "1.23x LTM revenue (median, 4 FY)",
+      "trimmed": false
+    },
+    {
+      "key": "pb",
+      "name": "P/B",
+      "role": "blend",
+      "fv": 569.18,
+      "valid": true,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": null,
+      "note": "5.24x BVPS 108.66 (median, 4 FY)",
       "trimmed": false
     },
     {
       "key": "ri",
       "name": "Residual Income",
-      "fv": 224.83,
+      "role": "blend",
+      "fv": 136.14,
       "valid": true,
       "weight": 0.0,
       "raw_weight": 0.0,
       "rating": 4,
-      "note": "ROE 14.2% vs COE 8.1% \u2192 fair P/B 2.07x",
+      "note": "ROE 14.6% fades to COE 8.7% over 10y; BVPS 108.66, payout 58%",
       "trimmed": false
     }
   ],
   "scenarios": {
     "bear": {
-      "master_fv": 479.51
+      "master_fv": 302.46,
+      "g_used": 0.06,
+      "beta_used": 0.897,
+      "moved_by": [
+        "dcf"
+      ]
     },
     "bull": {
-      "master_fv": 479.51
+      "master_fv": 441.03,
+      "g_used": 0.14,
+      "beta_used": 0.597,
+      "moved_by": [
+        "dcf",
+        "peg"
+      ]
     }
-  }
+  },
+  "diagnostics": {
+    "implied_g": -0.0393,
+    "implied_g_note": "market implies starting growth g*=-3.9% vs assumed g=10.0%",
+    "g_base": 0.1,
+    "trailing_rev_cagr": 0.1135
+  },
+  "inputs": {
+    "rf": 0.05276999950408936,
+    "erp": 0.046,
+    "beta_raw": 0.622,
+    "beta_adj": 0.74674,
+    "cost_of_equity": 0.08712003950408936,
+    "wacc": 0.07903984594838306,
+    "tax": 0.21076474196908757,
+    "cost_of_debt": 0.05310386209906175,
+    "shares_diluted": 906000000.0,
+    "debt_gross": 73328000000.0,
+    "leases_excluded": 0.0,
+    "debt_used": 73328000000.0,
+    "cash": 31468000000.0,
+    "cash_excess": 0.0,
+    "rev_ltm": 450129000000.0,
+    "ebitda_ltm": 25961000000.0,
+    "ebitda_basis": "NormalizedEBITDA",
+    "earnings_ltm": 14389447800.0,
+    "earnings_basis": "normalized",
+    "eps_ltm": 15.882392715231788,
+    "ocf_ltm": 27017000000.0,
+    "capex_ltm": 3400000000.0,
+    "sbc_ltm": 1023000000.0,
+    "interest_ltm": 3894000000.0,
+    "fcff_ltm": 25667282094.772373,
+    "fcff_margin_start": 0.051570298634635664,
+    "fcff_margin_norm": 0.06501837671137543,
+    "roe": 0.14621242318981628,
+    "bvps": 108.66114790286976,
+    "payout": 0.5752,
+    "hist_years": 4,
+    "hist_multiples": {
+      "pe": {
+        "median": 23.34219259012077,
+        "n": 4
+      },
+      "ps": {
+        "median": 1.2326823274263026,
+        "n": 4
+      },
+      "evebitda": {
+        "median": 15.646035431854965,
+        "n": 4
+      },
+      "pb": {
+        "median": 5.238114427051283,
+        "n": 4
+      }
+    }
+  },
+  "warnings": []
 }

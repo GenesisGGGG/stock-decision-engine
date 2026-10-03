@@ -3,108 +3,218 @@
   "name": "Northrop Grumman Corporation",
   "price": 478.0,
   "currency": "$",
-  "asof": "2026-10-03T05:25:18",
+  "asof": "2026-10-03T10:26:01",
   "archetype": "defense",
   "g_base": 0.05,
   "master": {
-    "fv": 563.82,
-    "upside": 0.1795,
+    "fv": 569.52,
+    "upside": 0.1915,
+    "status": "ok",
+    "coverage": 1.0,
     "dispersion": {
-      "min": 527.56,
-      "max": 740.67,
-      "ratio": 1.4,
+      "min": 277.38,
+      "max": 589.68,
+      "ratio": 2.13,
+      "level": "MODERATE"
+    },
+    "dispersion_blend": {
+      "min": 555.12,
+      "max": 589.68,
+      "ratio": 1.06,
       "level": "LOW"
     },
     "trimmed_models": [
-      "evebitda",
-      "dcf"
+      "ri"
     ]
   },
   "models": [
     {
       "key": "dcf",
-      "name": "DCF",
-      "fv": 979.48,
+      "name": "DCF (FCFF)",
+      "role": "blend",
+      "fv": 555.12,
       "valid": true,
-      "weight": 0.0,
-      "raw_weight": 0.35,
+      "weight": 0.4211,
+      "raw_weight": 0.4,
       "rating": 8.5,
-      "note": "g=5.0% fade\u21922.5%, WACC=6.3%, FCFm=11.8%",
-      "trimmed": true
-    },
-    {
-      "key": "revdcf",
-      "name": "Reverse DCF",
-      "fv": null,
-      "valid": false,
-      "weight": 0.0,
-      "raw_weight": 0.15,
-      "rating": 7,
-      "note": "price below zero-growth DCF ($764) \u2014 market prices ZERO/NEGATIVE growth. Signal of market pessimism, not a price target \u2014 excluded from blend",
+      "note": "g=5.0% fading to 2.5%, WACC=6.3%, FCFF margin 9.5% -> 6.8% (historical median) by y5",
       "trimmed": false
     },
     {
-      "key": "pe",
-      "name": "Forward P/E",
-      "fv": 527.56,
+      "key": "dcf_mkt",
+      "name": "DCF @ market g",
+      "role": "diagnostic",
+      "fv": 478.0,
       "valid": true,
-      "weight": 0.6666666666666666,
-      "raw_weight": 0.2,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": null,
+      "note": "same DCF run at the market-implied growth g*=2.1% - lands on the price by construction; this row shows the market's assumption, not ours",
+      "trimmed": false
+    },
+    {
+      "key": "revdcf",
+      "name": "Reverse DCF (diagnostic)",
+      "role": "diagnostic",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 7,
+      "note": "market implies starting growth g*=2.1% vs assumed g=5.0%",
+      "trimmed": false,
+      "implied_g": 0.0205
+    },
+    {
+      "key": "pe",
+      "name": "P/E (trailing)",
+      "role": "blend",
+      "fv": 589.68,
+      "valid": true,
+      "weight": 0.2632,
+      "raw_weight": 0.25,
       "rating": 8,
-      "note": "EPS fwd \u00d7 target 17.3x",
+      "note": "normalized LTM EPS 31.57 x 18.7x (median trailing P/E, 4 FY)",
       "trimmed": false
     },
     {
       "key": "peg",
       "name": "PEG",
-      "fv": 182.72,
-      "valid": true,
+      "role": "blend",
+      "fv": null,
+      "valid": false,
       "weight": 0.0,
       "raw_weight": 0.0,
       "rating": 5.5,
-      "note": "fair P/E = 1.2 \u00d7 5% = 6.0x",
+      "note": "EPS growth 5.0% below 8% - PEG not meaningful - gate",
       "trimmed": false
     },
     {
       "key": "evebitda",
       "name": "EV/EBITDA",
-      "fv": 523.1,
+      "role": "blend",
+      "fv": 574.3,
       "valid": true,
-      "weight": 0.0,
-      "raw_weight": 0.2,
+      "weight": 0.2632,
+      "raw_weight": 0.25,
       "rating": 8.5,
-      "note": "target 12.3x EV/EBITDA",
-      "trimmed": true
+      "note": "12.6x LTM EBITDA (median, 4 FY, period net debt)",
+      "trimmed": false
     },
     {
       "key": "ps",
       "name": "P/S",
-      "fv": 532.0,
+      "role": "blend",
+      "fv": 560.02,
       "valid": true,
-      "weight": 0.16666666666666666,
+      "weight": 0.0526,
       "raw_weight": 0.05,
       "rating": 3.5,
-      "note": "target 1.8x P/S",
+      "note": "1.86x LTM revenue (median, 4 FY)",
+      "trimmed": false
+    },
+    {
+      "key": "pb",
+      "name": "P/B",
+      "role": "blend",
+      "fv": 603.19,
+      "valid": true,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": null,
+      "note": "4.80x BVPS 125.59 (median, 4 FY)",
       "trimmed": false
     },
     {
       "key": "ri",
       "name": "Residual Income",
-      "fv": 740.67,
+      "role": "blend",
+      "fv": 277.38,
       "valid": true,
-      "weight": 0.16666666666666666,
+      "weight": 0.0,
       "raw_weight": 0.05,
       "rating": 3,
-      "note": "ROE 27.0% vs COE 6.7% \u2192 fair P/B 5.88x",
-      "trimmed": false
+      "note": "ROE 27.0% fades to COE 6.7% over 10y; BVPS 125.59, payout 30%",
+      "trimmed": true
     }
   ],
   "scenarios": {
     "bear": {
-      "master_fv": 563.82
+      "master_fv": 512.86,
+      "g_used": 0.02,
+      "beta_used": 0.45,
+      "moved_by": [
+        "dcf",
+        "ri"
+      ]
     },
     "bull": {
-      "master_fv": 563.82
+      "master_fv": 605.68,
+      "g_used": 0.08,
+      "beta_used": 0.3,
+      "moved_by": [
+        "dcf"
+      ]
     }
-  }
+  },
+  "diagnostics": {
+    "implied_g": 0.0205,
+    "implied_g_note": "market implies starting growth g*=2.1% vs assumed g=5.0%",
+    "g_base": 0.05,
+    "trailing_rev_cagr": 0.0465
+  },
+  "inputs": {
+    "rf": 0.05276999950408936,
+    "erp": 0.046,
+    "beta_raw": -0.11,
+    "beta_adj": 0.3,
+    "cost_of_equity": 0.06656999950408936,
+    "wacc": 0.06276999950408936,
+    "tax": 0.1644660322061931,
+    "cost_of_debt": 0.045675076240643195,
+    "shares_diluted": 142400000.0,
+    "debt_gross": 16289000000.0,
+    "leases_excluded": 1861000000.0,
+    "debt_used": 14428000000.0,
+    "cash": 2307000000.0,
+    "cash_excess": 2307000000.0,
+    "rev_ltm": 42892000000.0,
+    "ebitda_ltm": 7444000000.0,
+    "ebitda_basis": "NormalizedEBITDA",
+    "earnings_ltm": 4496000000.0,
+    "earnings_basis": "normalized",
+    "eps_ltm": 31.573033707865168,
+    "ocf_ltm": 5078000000.0,
+    "capex_ltm": 1432000000.0,
+    "sbc_ltm": 128000000.0,
+    "interest_ltm": 659000000.0,
+    "fcff_ltm": 4068616884.7761188,
+    "fcff_margin_start": 0.09485724342012773,
+    "fcff_margin_norm": 0.0684416850920119,
+    "roe": 0.26958476989956526,
+    "bvps": 125.58988764044943,
+    "payout": 0.2988,
+    "hist_years": 4,
+    "hist_multiples": {
+      "pe": {
+        "median": 18.676726997447663,
+        "n": 4
+      },
+      "ps": {
+        "median": 1.8592396249990215,
+        "n": 4
+      },
+      "evebitda": {
+        "median": 12.614404128183143,
+        "n": 4
+      },
+      "pb": {
+        "median": 4.802840036259084,
+        "n": 4
+      }
+    }
+  },
+  "warnings": [
+    "adjusted beta clamped 0.2563 -> 0.3"
+  ]
 }
