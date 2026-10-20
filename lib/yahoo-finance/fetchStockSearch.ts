@@ -19,7 +19,9 @@ export async function fetchStockSearch(ticker: string, newsCount: number = 5) {
 
     return response
   } catch (error) {
-    console.log("Failed to fetch stock search", error)
-    throw new Error("Failed to fetch stock search.")
+    // Yahoo hard-blocks this host's IP (429) — degrade to empty results
+    // instead of crashing the page. Callers already handle empty news/quotes.
+    console.log("stock search unavailable (Yahoo block), returning empty", error)
+    return { quotes: [], news: [], lists: [] } as unknown as SearchResult
   }
 }
