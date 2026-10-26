@@ -1,0 +1,208 @@
+{
+  "ticker": "MSFT",
+  "name": "Microsoft Corporation",
+  "price": 517.53,
+  "currency": "$",
+  "asof": "2026-10-03T09:10:04",
+  "archetype": "compounder",
+  "g_base": 0.13,
+  "master": {
+    "fv": 626.64,
+    "upside": 0.2108,
+    "status": "ok",
+    "coverage": 1.0,
+    "dispersion": {
+      "min": 208.74,
+      "max": 655.47,
+      "ratio": 3.14,
+      "level": "HIGH"
+    },
+    "dispersion_blend": {
+      "min": 558.83,
+      "max": 655.47,
+      "ratio": 1.17,
+      "level": "LOW"
+    },
+    "trimmed_models": [
+      "dcf",
+      "peg"
+    ]
+  },
+  "models": [
+    {
+      "key": "dcf",
+      "name": "DCF (FCFF)",
+      "role": "blend",
+      "fv": 208.74,
+      "valid": true,
+      "weight": 0.0,
+      "raw_weight": 0.4,
+      "rating": 8,
+      "note": "g=13.0% fading to 2.5%, WACC=10.2%, FCFF margin 17.2% -> 23.1% (historical median) by y5",
+      "trimmed": true
+    },
+    {
+      "key": "revdcf",
+      "name": "Reverse DCF (diagnostic)",
+      "role": "diagnostic",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 7.5,
+      "note": "market implies starting growth g*=37.3% vs assumed g=13.0%",
+      "trimmed": false,
+      "implied_g": 0.3728
+    },
+    {
+      "key": "pe",
+      "name": "P/E (trailing)",
+      "role": "blend",
+      "fv": 617.14,
+      "valid": true,
+      "weight": 0.5,
+      "raw_weight": 0.25,
+      "rating": 8,
+      "note": "normalized LTM EPS 17.35 x 35.6x (median trailing P/E, 4 FY)",
+      "trimmed": false
+    },
+    {
+      "key": "peg",
+      "name": "PEG",
+      "role": "blend",
+      "fv": 270.6,
+      "valid": true,
+      "weight": 0.0,
+      "raw_weight": 0.1,
+      "rating": 7.5,
+      "note": "fair P/E = 1.2 x 13 = 15.6x on normalized EPS",
+      "trimmed": true
+    },
+    {
+      "key": "evebitda",
+      "name": "EV/EBITDA",
+      "role": "blend",
+      "fv": 655.47,
+      "valid": true,
+      "weight": 0.4,
+      "raw_weight": 0.2,
+      "rating": 8,
+      "note": "23.4x LTM EBITDA (median, 4 FY, period net debt)",
+      "trimmed": false
+    },
+    {
+      "key": "ps",
+      "name": "P/S",
+      "role": "blend",
+      "fv": 558.83,
+      "valid": true,
+      "weight": 0.1,
+      "raw_weight": 0.05,
+      "rating": 5.5,
+      "note": "12.53x LTM revenue (median, 4 FY)",
+      "trimmed": false
+    },
+    {
+      "key": "pb",
+      "name": "P/B",
+      "role": "blend",
+      "fv": 684.66,
+      "valid": true,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": null,
+      "note": "11.52x BVPS 59.44 (median, 4 FY)",
+      "trimmed": false
+    },
+    {
+      "key": "ri",
+      "name": "Residual Income",
+      "role": "blend",
+      "fv": 148.58,
+      "valid": true,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 1.5,
+      "note": "ROE 34.0% fades to COE 10.2% over 10y; BVPS 59.44, payout 20%",
+      "trimmed": false
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "master_fv": 587.48,
+      "g_used": 0.09,
+      "beta_used": 1.222,
+      "moved_by": [
+        "dcf",
+        "peg"
+      ]
+    },
+    "bull": {
+      "master_fv": 674.92,
+      "g_used": 0.17,
+      "beta_used": 0.922,
+      "moved_by": [
+        "dcf",
+        "peg"
+      ]
+    }
+  },
+  "diagnostics": {
+    "implied_g": 0.3728,
+    "implied_g_note": "market implies starting growth g*=37.3% vs assumed g=13.0%",
+    "g_base": 0.13,
+    "trailing_rev_cagr": 0.1612
+  },
+  "inputs": {
+    "rf": 0.05276999950408936,
+    "erp": 0.046,
+    "beta_raw": 1.108,
+    "beta_adj": 1.0723600000000002,
+    "cost_of_equity": 0.10209855950408936,
+    "wacc": 0.10167962729740201,
+    "tax": 0.18604975925577727,
+    "cost_of_debt": 0.07571846925100512,
+    "shares_diluted": 7443000000.0,
+    "debt_gross": 56826000000.0,
+    "leases_excluded": 16532000000.0,
+    "debt_used": 40294000000.0,
+    "cash": 76651000000.0,
+    "cash_excess": 76651000000.0,
+    "rev_ltm": 331839000000.0,
+    "ebitda_ltm": 206708000000.0,
+    "ebitda_basis": "NormalizedEBITDA",
+    "earnings_ltm": 129109154920.4259,
+    "earnings_basis": "normalized",
+    "eps_ltm": 17.346386526995285,
+    "ocf_ltm": 182935000000.0,
+    "capex_ltm": 115948000000.0,
+    "sbc_ltm": 12405000000.0,
+    "interest_ltm": 3051000000.0,
+    "fcff_ltm": 57065362184.51062,
+    "fcff_margin_start": 0.17196701468034384,
+    "fcff_margin_norm": 0.23071871317763995,
+    "roe": 0.3403862745048138,
+    "bvps": 59.4366518876797,
+    "payout": 0.1983,
+    "hist_years": 4,
+    "hist_multiples": {
+      "pe": {
+        "median": 35.57742717760044,
+        "n": 4
+      },
+      "ps": {
+        "median": 12.534332614852307,
+        "n": 4
+      },
+      "evebitda": {
+        "median": 23.42572384024496,
+        "n": 4
+      },
+      "pb": {
+        "median": 11.519200369852086,
+        "n": 4
+      }
+    }
+  },
+  "warnings": []
+}

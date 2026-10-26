@@ -1,0 +1,185 @@
+{
+  "ticker": "ACHR",
+  "name": "Archer Aviation Inc.",
+  "price": 4.89,
+  "currency": "$",
+  "asof": "2026-10-03T09:10:10",
+  "archetype": "preprofit",
+  "g_base": 0.45,
+  "master": {
+    "fv": null,
+    "upside": null,
+    "status": "no_valid_models",
+    "coverage": 0,
+    "dispersion": null,
+    "dispersion_blend": null,
+    "trimmed_models": []
+  },
+  "models": [
+    {
+      "key": "dcf",
+      "name": "DCF (FCFF)",
+      "role": "blend",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.25,
+      "rating": 2,
+      "note": "FCFF margin <= 0 - gate",
+      "trimmed": false
+    },
+    {
+      "key": "revdcf",
+      "name": "Reverse DCF (diagnostic)",
+      "role": "diagnostic",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 8,
+      "note": "not computable (FCFF margin <= 0 - gate)",
+      "trimmed": false,
+      "implied_g": null
+    },
+    {
+      "key": "pe",
+      "name": "P/E (trailing)",
+      "role": "blend",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 0,
+      "note": "normalized EPS missing or <= 0 - gate",
+      "trimmed": false
+    },
+    {
+      "key": "peg",
+      "name": "PEG",
+      "role": "blend",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 0,
+      "note": "normalized EPS missing or <= 0 - gate",
+      "trimmed": false
+    },
+    {
+      "key": "evebitda",
+      "name": "EV/EBITDA",
+      "role": "blend",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": 1,
+      "note": "LTM EBITDA <= 0 or missing - gate",
+      "trimmed": false
+    },
+    {
+      "key": "ps",
+      "name": "P/S",
+      "role": "blend",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.6,
+      "rating": 3,
+      "note": "pre-revenue (LTM revenue < $100M) - gate",
+      "trimmed": false
+    },
+    {
+      "key": "pb",
+      "name": "P/B",
+      "role": "blend",
+      "fv": 9.22,
+      "valid": true,
+      "weight": 0.0,
+      "raw_weight": 0.0,
+      "rating": null,
+      "note": "3.81x BVPS 2.42 (median, 4 FY)",
+      "trimmed": false
+    },
+    {
+      "key": "ri",
+      "name": "Residual Income",
+      "role": "blend",
+      "fv": null,
+      "valid": false,
+      "weight": 0.0,
+      "raw_weight": 0.15,
+      "rating": 3,
+      "note": "ROE <= 0 or missing - gate",
+      "trimmed": false
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "master_fv": null,
+      "g_used": 0.2,
+      "beta_used": 2.0,
+      "moved_by": []
+    },
+    "bull": {
+      "master_fv": null,
+      "g_used": 0.8,
+      "beta_used": 1.85,
+      "moved_by": []
+    }
+  },
+  "diagnostics": {
+    "implied_g": null,
+    "implied_g_note": "not computable (FCFF margin <= 0 - gate)",
+    "g_base": 0.45,
+    "trailing_rev_cagr": null,
+    "cash_runway_years": 2.29
+  },
+  "inputs": {
+    "rf": 0.05276999950408936,
+    "erp": 0.046,
+    "beta_raw": 3.234,
+    "beta_adj": 2.0,
+    "cost_of_equity": 0.14476999950408936,
+    "wacc": 0.14212292766778956,
+    "tax": 0.21,
+    "cost_of_debt": 0.02,
+    "shares_diluted": 781700000.0,
+    "debt_gross": 125600000.0,
+    "leases_excluded": 45500000.0,
+    "debt_used": 80100000.0,
+    "cash": 1560600000.0,
+    "cash_excess": 1560600000.0,
+    "rev_ltm": 6900000.0,
+    "ebitda_ltm": -914000000.0,
+    "ebitda_basis": "NormalizedEBITDA",
+    "earnings_ltm": -799700000.0,
+    "earnings_basis": "normalized",
+    "eps_ltm": -1.0230267365997185,
+    "ocf_ltm": -540400000.0,
+    "capex_ltm": 140600000.0,
+    "sbc_ltm": 297600000.0,
+    "interest_ltm": 1000000.0,
+    "fcff_ltm": -977810000.0,
+    "fcff_margin_start": -141.71159420289854,
+    "fcff_margin_norm": null,
+    "roe": -0.4476099854472182,
+    "bvps": 2.4207496482026354,
+    "payout": 0.0,
+    "hist_years": 4,
+    "hist_multiples": {
+      "pe": null,
+      "ps": null,
+      "evebitda": null,
+      "pb": {
+        "median": 3.810515574752037,
+        "n": 4
+      }
+    }
+  },
+  "warnings": [
+    "effective tax unavailable - 21% statutory used",
+    "adjusted beta clamped 2.497 -> 2",
+    "cost of debt clamped 0.01248 -> 0.02"
+  ]
+}

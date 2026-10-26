@@ -1,75 +1,84 @@
-## Stocks tracking app
+# Stock Decision Engine
 
-https://github.com/DariusLukasukas/stocks/assets/64962012/d81789c6-18ee-4217-ba2d-c67130a08239
+A full-stack equity research tool that turns raw financial statements into an
+**allocation decision**: a master fair-value estimate, bear/base/bull scenarios,
+and a 6–12 month price target — instead of another 100-row financial table.
 
-![CleanShot 2024-04-06 at 15 14 39@2x](https://github.com/DariusLukasukas/stocks/assets/64962012/336da93c-4c09-4b9c-8af1-96618c02e482)
-![CleanShot 2024-04-15 at 13 52 01@2x](https://github.com/DariusLukasukas/stocks/assets/64962012/c2d75cdd-f1bd-40f7-bbeb-1d8c12ccc4e7)
-![CleanShot 2024-04-06 at 15 09 13@2x](https://github.com/DariusLukasukas/stocks/assets/64962012/28548d68-6066-4c5b-9cd3-476aadf41108)
+Built by [Nathan Yue](https://github.com/GenesisGGGG). Frontend in Next.js 14,
+valuation core in Python.
 
-## Key Features
+<!-- TODO: screenshots (landing, valuation page, screener) -->
 
-- Robust Stock Search and Screening: Quickly find relevant stocks using intuitive search tools and apply filters based on key metrics.
-- In-depth Company Information:
-  - Real-time stock quotes and historical pricing data
-  - Comprehensive financial statements (income statement, balance sheet, cash flow)
-  - Key ratios and fundamental metrics
-  - Detailed company profiles and summaries
-- Interactive Charting Tools:
-  - Customizable Visx area charts for visualizing market trends and patterns
-  - Adjustable timeframes (intraday, daily, weekly, monthly, etc.)
-- Market News Integration:
-  - Curated feed of relevant news articles and analysis
-  - Ability to filter news sources by relevance and sector
+## What it does
 
-## Development Roadmap:
+1. **Pulls fundamentals** via `yfinance` (statements, balance sheets, prices, splits)
+2. **Values each stock with 7 independent models** — DCF (FCFF), reverse-DCF
+   diagnostic, trailing P/E, PEG, EV/EBITDA, P/S, P/B, and residual income —
+   each with its own validity gates and fallbacks
+3. **Blends the survivors**: invalid models are dropped, outliers beyond 2×
+   the median are trimmed, weights are renormalized, and the master value is
+   *withheld* (rather than guessed) when computable coverage falls below 35%
+4. **Produces bear/base/bull scenarios** and a 12-month price target, and
+   writes one auditable JSON per ticker — every fallback and clamp is logged
+5. **Renders it all** in a decision-first UI: master dial, price-target range,
+   model breakdown, and only the ~24 metrics that matter, each with market /
+   sector context
 
-- Personalized stock watchlists
-- Support for technical indicators (moving averages, Bollinger Bands, RSI, etc.)
-- Dedicated news section
-- User preferences and settings
+The engine's full specification — input fallbacks, clamps, model formulas,
+blend logic, known approximations — is documented in
+[`engine/README_AUDIT.md`](engine/README_AUDIT.md).
 
-## Technical Overview
+## Architecture
 
-Frontend: Next.js, React.js, TailwindCSS
-Data Source: Yahoo-Finance2
-Charting: Visx, d3.js
-UI Components: Radix UI, Shadcn.
-
-## Contributions and Feedback
-
-If you have bug reports, feature suggestions, or want to get involved in development, please open an issue or submit a pull request.
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+engine/engine.py  ──yfinance──▶  per-ticker JSON  ──▶  Next.js app renders it
+  7 valuation models                 (public/valuation/)      ├─ /valuation/[ticker]
+  + 1 diagnostic                                            ├─ /screener
+  blend + scenarios                                         └─ /stocks/[ticker]
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The Python engine is the entire calculation layer; the site only renders the
+JSONs it produces. Offline tests (`engine/test_engine.py`) run the models
+against synthetic statements with no network access.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Running it
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+**Engine** (writes JSONs to `public/valuation/`):
 
-## Learn More
+```bash
+cd engine
+pip install yfinance pandas
+python3 engine.py AAPL MSFT        # or no args for the built-in ticker set
+python3 test_engine.py             # offline, no network
+```
 
-To learn more about Next.js, take a look at the following resources:
+**Web app**:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Design notes
 
-## Deploy on Vercel
+- **Decision-first, not data-first.** The UI is built around one question —
+  *what's this stock worth and what do I do* — with data density treated as a
+  cost, not a feature. Layout reference: Finviz fundamentals, Simply Wall St
+  snowflake (but with formulas published).
+- **Withholding is a feature.** When the models can't cover a stock, the
+  engine says so instead of emitting a confident number.
+- **Every judgment is disclosed.** Analyst-assumed growth rates per ticker,
+  calibration constants (ERP, terminal growth, PEG anchor), and every clamp that
+  binds are visible in the output `warnings`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Next.js 14 (App Router) · TypeScript · Tailwind · shadcn/ui · Recharts/Visx ·
+Python · yfinance · pandas
+
+UI scaffold based on [DariusLukasukas/stocks](https://github.com/DariusLukasukas/stocks) (MIT).
+
+## Disclaimer
+
+Research/educational tool. Data via unofficial Yahoo Finance endpoints; verify
+before trading. Not investment advice.
