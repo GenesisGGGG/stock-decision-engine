@@ -7,12 +7,12 @@ export default function Home() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-8 py-16">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">StockIQ</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Stock Decision Engine</h1>
         <p className="mt-2 text-muted-foreground">
-          Valuation decision engine — multi-model fair value, per-model
-          transparency, bear/base/bull scenarios. The Yahoo-backed market
-          dashboard (this page&apos;s original version) is offline from this
-          host&apos;s IP; the valuation engine below is fully live.
+          Multi-model fair value for US equities. Seven valuation models plus a
+          reverse-DCF diagnostic, blended with outlier trimming and coverage
+          gates — reported with bear/base/bull scenarios and full per-model
+          transparency. Pick a ticker:
         </p>
       </div>
 

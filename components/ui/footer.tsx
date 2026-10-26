@@ -10,14 +10,14 @@ export default function Footer() {
           Built by{" "}
           <Link
             prefetch={false}
-            href="https://twitter.com/DariusLukasukas"
+            href="https://github.com/GenesisGGGG"
             target="_blank"
             rel="noreferrer"
             className="font-medium underline underline-offset-4"
           >
-            Darius Lukasukas
+            Nathan Yue
           </Link>
-          . The source code is available on{" "}
+          . UI scaffold based on{" "}
           <Link
             prefetch={false}
             href="https://github.com/DariusLukasukas/stocks"
@@ -25,7 +25,7 @@ export default function Footer() {
             rel="noreferrer"
             className="font-medium underline underline-offset-4"
           >
-            GitHub
+            DariusLukasukas/stocks
           </Link>
           .
         </p>

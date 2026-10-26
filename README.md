@@ -7,7 +7,9 @@ and a 6–12 month price target — instead of another 100-row financial table.
 Built by [Nathan Yue](https://github.com/GenesisGGGG). Frontend in Next.js 14,
 valuation core in Python.
 
-<!-- TODO: screenshots (landing, valuation page, screener) -->
+![Landing page](docs/screenshots/landing.png)
+
+![MSFT model breakdown](docs/screenshots/valuation-msft.png)
 
 ## What it does
 

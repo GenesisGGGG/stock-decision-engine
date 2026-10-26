@@ -159,7 +159,7 @@ export default function ValuationPage() {
 
   return (
     <div style={{ maxWidth: 1060, margin: "0 auto", padding: "28px 20px 60px", color: C.txt }}>
-      <style>{`
+      <style suppressHydrationWarning>{`
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
         .vchip { padding:5px 13px; border-radius:7px; border:1px solid ${C.border}; background:${C.panel};
                  font-family:${C.mono}; font-size:12px; font-weight:600; color:${C.txt2}; cursor:pointer; }
@@ -246,7 +246,7 @@ export default function ValuationPage() {
               </div>
               <div style={{ fontSize: 12, color: C.txt3, marginTop: 6 }}>
                 ● white = current price · <span style={{ color: C.green }}>◉ green = model value</span> ·
-                {" "}{data.models.filter((m) => m.valid).length} of 7 models active (invalid gates → weight 0, renormalized) ·
+                {" "}{data.models.filter((m) => m.valid).length} of {data.models.length} models active (invalid gates → weight 0, renormalized) ·
                 base growth {Math.round(data.g_base * 100)}% · {data.archetype} archetype
               </div>
             </div>
@@ -454,7 +454,7 @@ export default function ValuationPage() {
           </div>
 
           <div style={{ marginTop: 26, fontSize: 12, color: C.txt3, lineHeight: 1.6 }}>
-            Draft 2 · data as of {new Date(data.asof).toLocaleString()} · targets = median of own historical multiples (3–5 FY, period share counts) ·
+            Draft 2 · data as of {data.asof.slice(0, 10)} · targets = median of own historical multiples (3–5 FY, period share counts) ·
             invalid models gated (weight 0) · outliers trimmed outside a 0.5–2.0× median band · dispersion spans ALL valid models (pre-trim) ·
             reverse DCF is a diagnostic (market-implied growth, never blended) · every input, fallback and clamp logged in the JSON (inputs / warnings).
           </div>
